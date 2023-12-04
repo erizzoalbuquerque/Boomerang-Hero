@@ -6,18 +6,24 @@ using UnityEngine;
 
 public class Boomerang : MonoBehaviour
 {
+    [Header("References")]
     [SerializeField] Rigidbody2D _rb;
     [SerializeField] Hero _hero;
 
+    [Header("Regular Settings")]
     [SerializeField] float _regularMaxSpeed = 1f;
     [SerializeField] float _regularTurningSpeed = 1f;
 
+    [Header("Pulling Settings")]
     [SerializeField] float _pullingMaxSpeed = 1f;
 
+    [Header("Flying Settings")]
+    [SerializeField] float _baseFlyingTime = 5f;
+    [SerializeField] float _baseFlyingMultiplierAfterBounce = 0.5f;
     [SerializeField] AnimationCurve _maxSpeedMultiplierCurve;
     [SerializeField] AnimationCurve _turningSpeedMultiplierCurve;
-    [SerializeField] float _baseFlyingTime = 5f;
 
+    [Header("Details")]
     [SerializeField] float _secondsBeforeCanBePutAway = 1f;
     [SerializeField] float _secondsBeforeCanBePulled = 0.1f;
 
@@ -25,9 +31,9 @@ public class Boomerang : MonoBehaviour
     [SerializeField] bool _debug = false;
     [SerializeField] float _gizmosSize = 0.5f;
 
-    float _modifiedRegularMaxSpeed, _modifiedRegularTurningSpeed;
-
     Vector2 _velocity, _desiredVelocity;
+
+    float _modifiedBaseFlyingTime;
 
     bool _isThrown;
     bool _isPulling;
@@ -36,6 +42,8 @@ public class Boomerang : MonoBehaviour
     bool _canBePulled;
 
     float _timeSinceThrown = 0f;
+
+    public event Action dashStarted;
 
     void Awake()
     {
@@ -85,8 +93,8 @@ public class Boomerang : MonoBehaviour
         Vector2 newVelocity;
         if (_isPulling == false)
         {
-            float modifiedRegularMaxSpeed = _regularMaxSpeed * _maxSpeedMultiplierCurve.Evaluate(Mathf.Clamp01(_timeSinceThrown / _baseFlyingTime));
-            float modifiedRegularTurningSpeed = _regularTurningSpeed * _turningSpeedMultiplierCurve.Evaluate(Mathf.Clamp01(_timeSinceThrown / _baseFlyingTime));
+            float modifiedRegularMaxSpeed = _regularMaxSpeed * _maxSpeedMultiplierCurve.Evaluate(Mathf.Clamp01(_timeSinceThrown / _modifiedBaseFlyingTime));
+            float modifiedRegularTurningSpeed = _regularTurningSpeed * _turningSpeedMultiplierCurve.Evaluate(Mathf.Clamp01(_timeSinceThrown / _modifiedBaseFlyingTime));
 
             newDesiredVelocity = modifiedRegularMaxSpeed * heroDirection;
             newVelocity = RotateTowards(currentVelocity, newDesiredVelocity, modifiedRegularTurningSpeed * Time.deltaTime);
@@ -162,6 +170,7 @@ public class Boomerang : MonoBehaviour
         Invoke("SetTrueCanBePutAway", _secondsBeforeCanBePutAway);
 
         _timeSinceThrown = 0f;
+        _modifiedBaseFlyingTime = _baseFlyingTime;
 
         _isThrown = true;
     }
@@ -195,11 +204,39 @@ public class Boomerang : MonoBehaviour
         if (pull && _canBePulled)
         {
             _isPulling = true;
+            dashStarted.Invoke();
         }
         else
         {
             _isPulling = false;
         }
+    }
+
+    void Bounce(Vector3 normalDirection)
+    {
+        _rb.velocity = Vector2.Reflect(_velocity, normalDirection);
+
+        _timeSinceThrown = 0f;
+        _modifiedBaseFlyingTime = _baseFlyingTime * _baseFlyingMultiplierAfterBounce;
+
+        _isPulling = false;
+        
+        _canBePulled = false;
+        Invoke("SetTrueCanBePulled", _secondsBeforeCanBePulled);
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+            return;
+
+        Enemy enemy = collision.gameObject.GetComponent<Enemy>();
+        if (enemy != null)
+        {
+            enemy.ReceiveHit(-collision.GetContact(0).normal);
+        }
+
+        Bounce(collision.GetContact(0).normal);
     }
 
     void OnDrawGizmos()
