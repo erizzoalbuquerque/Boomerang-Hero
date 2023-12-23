@@ -3,12 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEngine;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class Boomerang : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] Rigidbody2D _rb;
     [SerializeField] Hero _hero;
+    [SerializeField] AudioSource _audioSource;
 
     [Header("Regular Settings")]
     [SerializeField] float _regularMaxSpeed = 1f;
@@ -43,6 +45,8 @@ public class Boomerang : MonoBehaviour
 
     float _timeSinceThrown = 0f;
 
+    int _consecutiveHits = 0;
+
     public event Action dashStarted;
 
     void Awake()
@@ -58,6 +62,8 @@ public class Boomerang : MonoBehaviour
         _canBePulled = false;
 
         _timeSinceThrown = 0f;
+
+        _consecutiveHits = 0;
 
         Deactivate();
     }
@@ -187,6 +193,8 @@ public class Boomerang : MonoBehaviour
         }
 
         _isThrown = false;
+
+        _consecutiveHits = 0;
     }
 
     void SetTrueCanBePutAway()
@@ -212,6 +220,20 @@ public class Boomerang : MonoBehaviour
         }
     }
 
+    void HitEnemy(Enemy enemy, Collision2D collision)
+    {
+        enemy.ReceiveHit(-collision.GetContact(0).normal);
+
+        _consecutiveHits++;
+        _consecutiveHits = Mathf.Clamp(_consecutiveHits, 0, 3);
+        
+        if (_audioSource != null)
+        {
+            _audioSource.pitch = 1f + _consecutiveHits * 0.3f;
+            _audioSource.Play();
+        }
+    }
+
     void Bounce(Vector3 normalDirection)
     {
         _rb.velocity = Vector2.Reflect(_velocity, normalDirection);
@@ -233,7 +255,7 @@ public class Boomerang : MonoBehaviour
         Enemy enemy = collision.gameObject.GetComponent<Enemy>();
         if (enemy != null)
         {
-            enemy.ReceiveHit(-collision.GetContact(0).normal);
+            HitEnemy(enemy, collision);
         }
 
         Bounce(collision.GetContact(0).normal);
