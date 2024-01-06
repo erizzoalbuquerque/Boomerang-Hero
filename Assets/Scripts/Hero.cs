@@ -5,6 +5,7 @@ using UnityEngine;
 public class Hero : MonoBehaviour
 {
     [SerializeField] Boomerang _boomerang;
+    [SerializeField] DamageHitbox _damageHitbox;
     [SerializeField] float _maxSpeed = 1f;
     [SerializeField] float _boomerangThrowOriginDistance = 0.5f;
 
@@ -60,5 +61,20 @@ public class Hero : MonoBehaviour
     void Move()
     {
         _rb.velocity = _movingDirection * _maxSpeed;
+    }
+
+    void OnHit(HitInfo hitInfo)
+    {
+        print("Hero Got Hit!");
+    }
+
+    private void OnEnable()
+    {
+        _damageHitbox.GotHit += OnHit;
+    }
+
+    private void OnDisable()
+    {
+        _damageHitbox.GotHit -= OnHit;
     }
 }

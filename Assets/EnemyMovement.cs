@@ -25,13 +25,7 @@ public class EnemyMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Temp Movement
-        float period = 5f;
-        Vector2 direction = new Vector2(Mathf.Sin(2f * Mathf.PI * 1f / period * Time.time), Mathf.Cos(2f * Mathf.PI * 1f / period * Time.time));
 
-
-        if (_canMove)
-            Move(direction);
     }
 
     private void OnEnable()
@@ -45,9 +39,10 @@ public class EnemyMovement : MonoBehaviour
     }
 
 
-    void Move(Vector2 direction)
-    { 
-        _rb.velocity = direction * _maxSpeed;
+    public void Move(Vector2 direction)
+    {
+        if (_canMove)
+            _rb.velocity = direction.normalized  * _maxSpeed;
     }
 
     void OnHit(HitInfo hitInfo)
