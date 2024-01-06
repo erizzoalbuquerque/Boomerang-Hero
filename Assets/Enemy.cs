@@ -1,11 +1,13 @@
 using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Enemy : MonoBehaviour
 {
-    [SerializeField] float _knockbackDistance = 0.3f;
+    public event Action<HitInfo> GotHit; 
 
     // Start is called before the first frame update
     void Start()
@@ -21,8 +23,8 @@ public class Enemy : MonoBehaviour
 
     public void ReceiveHit(Vector3 direction)
     {
+        GotHit.Invoke(new HitInfo(direction));
         GetComponent<Blinking>().StartBlinking();
         GetComponent<Cinemachine.CinemachineImpulseSource>().GenerateImpulseWithForce(0.1f);
-        this.transform.DOMove(this.transform.position + direction * _knockbackDistance, 0.5f).SetEase(Ease.OutCubic);
     }
 }
