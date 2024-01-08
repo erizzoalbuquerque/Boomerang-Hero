@@ -14,6 +14,9 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] float _knockbackTime= 0.5f;
     [SerializeField] float _knockbackDistance = 0.3f;
 
+    [SerializeField] float _jumpTime = 2f;
+    [SerializeField] float _jumpDistance = 3f;
+
     bool _canMove = true;
 
     // Start is called before the first frame update
@@ -51,6 +54,17 @@ public class EnemyMovement : MonoBehaviour
         ApplyStagger();
     }
 
+    public void Jump(Vector2 direction)
+    {
+        if (_canMove)
+            ApplyJump(direction);
+    }
+
+    void ApplyJump(Vector2 direction)
+    {
+        StartCoroutine(JumpCoroutine(direction));
+    }
+
     void ApplyKnockback(Vector2 direction)
     {
         StartCoroutine(KnockbackCoroutine(direction));
@@ -61,10 +75,20 @@ public class EnemyMovement : MonoBehaviour
         StartCoroutine(StaggerCoroutine());
     }
 
+    IEnumerator JumpCoroutine(Vector2 direction)
+    {
+        _canMove = false;
+        _rb.velocity = Vector3.zero;
+        Tween tween = _rb.DOMove(this.transform.position + (Vector3)direction.normalized * _jumpDistance, _jumpTime).SetEase(Ease.OutCubic);
+
+        yield return tween.WaitForCompletion();
+        _canMove = true;
+    }
+
     IEnumerator KnockbackCoroutine(Vector2 direction)
     {
-        this._rb.velocity = Vector3.zero;
-        Tween tween = this._rb.DOMove(this.transform.position + (Vector3) direction * _knockbackDistance, _knockbackTime).SetEase(Ease.OutCubic);
+        _rb.velocity = Vector3.zero;
+        Tween tween = _rb.DOMove(this.transform.position + (Vector3) direction.normalized * _knockbackDistance, _knockbackTime).SetEase(Ease.OutCubic);
 
         yield return tween.WaitForCompletion();
     }

@@ -2,12 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyBrain : MonoBehaviour
+public class ContactAttackSkill : Skill
 {
-    [SerializeField] Enemy _enemy;
-    [SerializeField] EnemyMovement _enemyMovement;
-    [SerializeField] Hero _hero;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -17,6 +13,6 @@ public class EnemyBrain : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _enemyMovement.Move(_hero.transform.position - this.transform.position);
+        
     }
 }

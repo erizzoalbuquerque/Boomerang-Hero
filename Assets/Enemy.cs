@@ -7,12 +7,11 @@ using UnityEngine.Events;
 
 public class Enemy : MonoBehaviour
 {
-    public event Action<HitInfo> GotHit; 
+    public event Action<HitInfo> GotHit;
 
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // Update is called once per frame
