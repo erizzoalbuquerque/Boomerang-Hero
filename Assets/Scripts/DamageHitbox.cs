@@ -7,7 +7,8 @@ public class DamageHitbox : MonoBehaviour
 
     public void Hit(HitInfo hitInfo)
     {
+        print("Receive Damage Hit");
         if (GotHit != null)
-            GotHit.Invoke(hitInfo);  
+            GotHit.Invoke(hitInfo);
     }
 }

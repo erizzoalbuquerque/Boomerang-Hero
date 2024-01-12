@@ -31,11 +31,11 @@ public class BoomerangVisual : MonoBehaviour
 
     private void OnEnable()
     {
-        _boomerang.dashStarted += EmitDashParticles;
+        //_boomerang.dashStarted += EmitDashParticles;
     }
 
     private void OnDisable()
     {
-        _boomerang.dashStarted -= EmitDashParticles;
+        //_boomerang.dashStarted -= EmitDashParticles;
     }
 }

@@ -5,6 +5,9 @@ using UnityEngine;
 
 public class JumpAttackSkill : Skill
 {
+    float coolDown = 3f;
+    float coolDownStartTime = 0f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -17,10 +20,18 @@ public class JumpAttackSkill : Skill
         
     }
 
-    public void Do(EnemyMovement enemyMovement, Vector3 direction)
+    public bool Do(EnemyMovement enemyMovement, Vector3 direction)
     {
+        if (Time.time - coolDownStartTime < coolDown)
+            return false;
+
         _attackHitbox.enabled = true;
+
+        coolDownStartTime = Time.time;
         enemyMovement.Jump(direction);
+
         _attackHitbox.enabled = false;
+
+        return true;
     }
 }

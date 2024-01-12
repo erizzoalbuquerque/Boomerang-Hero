@@ -33,12 +33,13 @@ public class Boomerang : MonoBehaviour
     [SerializeField] bool _debug = false;
     [SerializeField] float _gizmosSize = 0.5f;
 
-    Vector2 _velocity, _desiredVelocity;
+    Vector2 _velocityAfterUpdate;
+    Vector2 _desiredVelocity;
 
     float _modifiedBaseFlyingTime;
 
     bool _isThrown;
-    bool _isPulling;
+    bool _isBeingPulled;
 
     bool _canBePutAway;
     bool _canBePulled;
@@ -47,7 +48,6 @@ public class Boomerang : MonoBehaviour
 
     int _consecutiveHits = 0;
 
-    public event Action dashStarted;
 
     void Awake()
     {
@@ -56,15 +56,6 @@ public class Boomerang : MonoBehaviour
 
     void Start()
     {
-        _isThrown = false;
-        _isPulling = false;
-        _canBePutAway = false;
-        _canBePulled = false;
-
-        _timeSinceThrown = 0f;
-
-        _consecutiveHits = 0;
-
         Deactivate();
     }
 
@@ -95,46 +86,36 @@ public class Boomerang : MonoBehaviour
 
         Vector2 heroDirection = (_hero.transform.position - this.transform.position).normalized;
 
-        Vector2 newDesiredVelocity;
+        Vector2 desiredVelocity;
         Vector2 newVelocity;
-        if (_isPulling == false)
-        {
-            float modifiedRegularMaxSpeed = _regularMaxSpeed * _maxSpeedMultiplierCurve.Evaluate(Mathf.Clamp01(_timeSinceThrown / _modifiedBaseFlyingTime));
-            float modifiedRegularTurningSpeed = _regularTurningSpeed * _turningSpeedMultiplierCurve.Evaluate(Mathf.Clamp01(_timeSinceThrown / _modifiedBaseFlyingTime));
 
-            newDesiredVelocity = modifiedRegularMaxSpeed * heroDirection;
-            newVelocity = RotateTowards(currentVelocity, newDesiredVelocity, modifiedRegularTurningSpeed * Time.deltaTime);
+        if (_isBeingPulled)
+        {
+            // Go straight to hero
+            desiredVelocity = _pullingMaxSpeed * heroDirection;
+            newVelocity = desiredVelocity;
+
         }
         else
         {
-            newDesiredVelocity = _pullingMaxSpeed * heroDirection;
-            newVelocity = newDesiredVelocity;
+            float evalValue = Mathf.Clamp01(_timeSinceThrown / _modifiedBaseFlyingTime);
+
+            float modifiedRegularMaxSpeed = _regularMaxSpeed * _maxSpeedMultiplierCurve.Evaluate(evalValue);
+            float modifiedRegularTurningSpeed = _regularTurningSpeed * _turningSpeedMultiplierCurve.Evaluate(evalValue);
+
+            desiredVelocity = modifiedRegularMaxSpeed * heroDirection;
+
+            float maxDeltaAngle = modifiedRegularTurningSpeed * Time.deltaTime;
+            newVelocity = UnityExtensions.RotateTowards(currentVelocity, desiredVelocity, maxDeltaAngle);
         }
-            
-
-
+ 
         _rb.velocity = newVelocity;
 
-        _desiredVelocity = newDesiredVelocity;
-        _velocity = newVelocity;
-    }
+        // Store last veolocity before collision
+        _velocityAfterUpdate = newVelocity;
 
-
-    Vector2 RotateTowards(Vector2 current, Vector2 target, float maxRadiansDelta)
-    {
-        float angle = Vector2.SignedAngle(current, target);
-
-        // I want to favor clockwise movement.
-        if (angle == 180f)
-        {
-            angle = -180;
-        }
-
-        Vector2 newDirection = Quaternion.AngleAxis(Mathf.Clamp(angle,-maxRadiansDelta * Mathf.Rad2Deg,maxRadiansDelta * Mathf.Rad2Deg ), Vector3.forward) * current;
-
-        newDirection = newDirection.normalized * target.magnitude;
-
-        return newDirection;
+        // Stored for debug
+        _desiredVelocity = desiredVelocity;
     }
 
 
@@ -142,49 +123,62 @@ public class Boomerang : MonoBehaviour
     {
         if (_isThrown == false)
         {   
-            Activate(direction,startPosition);
+            Activate(direction, startPosition);
         }
     }
 
-    void PutAway()
+
+    public void Pull(bool pull)
     {
-        print("Put Away()");
-        Deactivate();
+        _isBeingPulled = pull && _canBePulled;
     }
+
 
     void Activate(Vector2 direction, Vector2 startPosition)
     {
+        // Set initial boomerang position
         this.transform.position = startPosition;
 
+        // Turn on physics
         _rb.simulated = true;
 
-        _velocity = direction.normalized * _regularMaxSpeed;
-        _rb.velocity = _velocity;
+        // Set velocity vector 2
+        _rb.velocity = direction.normalized * _regularMaxSpeed;
 
-        _isPulling = false;
+        // Set internal state to know boomerang is not being pulled
+        _isBeingPulled = false;
 
+        // Activate all components
         for (int i=0; i<transform.childCount;i++)
         {
             transform.GetChild(i).gameObject.SetActive(true);
         }
 
+        // Prohibit user from pulling the boomerang before delay
         _canBePulled = false;
         Invoke("SetTrueCanBePulled", _secondsBeforeCanBePulled);
 
-
+        // Prohibit user from putting away the boomerang before delay
         _canBePutAway = false;
         Invoke("SetTrueCanBePutAway", _secondsBeforeCanBePutAway);
 
         _timeSinceThrown = 0f;
+
+        // Flying initial state
         _modifiedBaseFlyingTime = _baseFlyingTime;
 
         _isThrown = true;
     }
 
+
     void Deactivate()
     {
-        _canBePutAway = true;
+        _isThrown = false;
+        _isBeingPulled = false;
+        _canBePutAway = false;
+        _canBePulled = false;
 
+        // Turn off physics
         _rb.simulated = false;
 
         for (int i = 0; i < transform.childCount; i++)
@@ -192,41 +186,60 @@ public class Boomerang : MonoBehaviour
             transform.GetChild(i).gameObject.SetActive(false);
         }
 
-        _isThrown = false;
-
         _consecutiveHits = 0;
     }
+
 
     void SetTrueCanBePutAway()
     {
         _canBePutAway = true;
     }
 
+
     void SetTrueCanBePulled()
     {
         _canBePulled = true;
     }
 
-    public void Pull(bool pull)
+
+    void OnCollisionEnter2D(Collision2D collision)
     {
-        if (pull && _canBePulled)
+        if (collision.gameObject.tag == "Player")
+            return;
+
+        Bounce(collision.GetContact(0).normal);
+    }
+
+
+    void OnTriggerEnter2D(Collider2D collider)
+    {
+        print("Enter1");
+
+        if (collider.gameObject.tag == "Enemy")
         {
-            _isPulling = true;
-            dashStarted.Invoke();
-        }
-        else
-        {
-            _isPulling = false;
+            DamageHitbox enemyHitbox = collider.gameObject.GetComponent<DamageHitbox>();
+
+            print("Enter2");
+
+            if (enemyHitbox != null)
+            {
+                print("Enter3");
+
+                Vector2 direction = collider.transform.position - transform.position;
+                HitEnemy(enemyHitbox, direction);
+            }
         }
     }
 
-    void HitEnemy(Enemy enemy, Collision2D collision)
+
+    void HitEnemy(DamageHitbox enemyHitbox, Vector2 direction)
     {
-        enemy.ReceiveHit(-collision.GetContact(0).normal);
+        enemyHitbox.Hit(new HitInfo(-direction));
+        //enemyHitbox.Hit(new HitInfo(-collider.GetContact(0).normal));
 
         _consecutiveHits++;
         _consecutiveHits = Mathf.Clamp(_consecutiveHits, 0, 3);
-        
+
         if (_audioSource != null)
         {
             _audioSource.pitch = 1f + _consecutiveHits * 0.3f;
@@ -234,32 +247,20 @@ public class Boomerang : MonoBehaviour
         }
     }
 
+
     void Bounce(Vector3 normalDirection)
     {
-        _rb.velocity = Vector2.Reflect(_velocity, normalDirection);
+        _rb.velocity = Vector2.Reflect(_velocityAfterUpdate, normalDirection);
 
         _timeSinceThrown = 0f;
         _modifiedBaseFlyingTime = _baseFlyingTime * _baseFlyingMultiplierAfterBounce;
 
-        _isPulling = false;
-        
+        _isBeingPulled = false;
+
         _canBePulled = false;
         Invoke("SetTrueCanBePulled", _secondsBeforeCanBePulled);
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.tag == "Player")
-            return;
-
-        Enemy enemy = collision.gameObject.GetComponent<Enemy>();
-        if (enemy != null)
-        {
-            HitEnemy(enemy, collision);
-        }
-
-        Bounce(collision.GetContact(0).normal);
-    }
 
     void OnDrawGizmos()
     {
@@ -272,6 +273,6 @@ public class Boomerang : MonoBehaviour
 
         //Blue velocity
         Gizmos.color = Color.blue;
-        Gizmos.DrawLine(this.transform.position, this.transform.position + new Vector3(_velocity.normalized.x, _velocity.normalized.y, 0f) * _gizmosSize);
+        Gizmos.DrawLine(this.transform.position, this.transform.position + new Vector3(_velocityAfterUpdate.normalized.x, _velocityAfterUpdate.normalized.y, 0f) * _gizmosSize);
     }
 }

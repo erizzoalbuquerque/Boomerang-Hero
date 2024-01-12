@@ -7,6 +7,7 @@ public class EnemyMovement : MonoBehaviour
 {
     [SerializeField] Enemy _enemy;
     [SerializeField] Rigidbody2D _rb;
+
     [SerializeField] float _maxSpeed = 1f;
 
     [SerializeField] float _staggerTime = 0.5f;
@@ -29,16 +30,6 @@ public class EnemyMovement : MonoBehaviour
     void Update()
     {
 
-    }
-
-    private void OnEnable()
-    {
-        _enemy.GotHit += OnHit;
-    }
-
-    private void OnDisable()
-    {
-        _enemy.GotHit -= OnHit;
     }
 
 

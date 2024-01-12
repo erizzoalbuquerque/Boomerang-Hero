@@ -7,7 +7,7 @@ using UnityEngine.Events;
 
 public class Enemy : MonoBehaviour
 {
-    public event Action<HitInfo> GotHit;
+    [SerializeField] DamageHitbox _damageHitbox;
 
     // Start is called before the first frame update
     void Start()
@@ -20,9 +20,19 @@ public class Enemy : MonoBehaviour
         
     }
 
-    public void ReceiveHit(Vector3 direction)
+    void OnEnable()
     {
-        GotHit.Invoke(new HitInfo(direction));
+        _damageHitbox.GotHit += ReceiveHit;
+    }
+
+    void OnDisable()
+    {
+        _damageHitbox.GotHit -= ReceiveHit;
+    }
+
+    void ReceiveHit(HitInfo hitInfo)
+    {
+        print("Receive Hit");
         GetComponent<Blinking>().StartBlinking();
         GetComponent<Cinemachine.CinemachineImpulseSource>().GenerateImpulseWithForce(0.1f);
     }

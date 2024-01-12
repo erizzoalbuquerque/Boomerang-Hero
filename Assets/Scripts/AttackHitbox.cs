@@ -6,16 +6,16 @@ public class AttackHitbox : MonoBehaviour
 {
     [SerializeField] float _intensity = 1f;
     [SerializeField] LayerMask _layerMask;
-    public bool enabled = true;
+    public bool isActive = true;
 
     private void Awake()
     {
-        enabled = true;
+        //isActive = true;
     }
 
     void OnTriggerEnter2D(Collider2D c)
     {
-        if (!enabled)
+        if (!isActive)
             return;
 
         if (! _layerMask.Contains(c.gameObject.layer))
