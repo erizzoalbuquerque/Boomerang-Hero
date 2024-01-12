@@ -204,41 +204,39 @@ public class Boomerang : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
+        print("Colllision : " + collision.gameObject.tag);
         if (collision.gameObject.tag == "Player")
             return;
 
-        Bounce(collision.GetContact(0).normal);
+        Vector2 collisionNormal = collision.GetContact(0).normal;
+
+        if (collision.gameObject.tag == "Enemy")
+        {
+            DamageHitbox enemyHitbox = collision.gameObject.GetComponent<DamageHitbox>();
+
+            if (enemyHitbox != null)
+            {
+                HitEnemy(enemyHitbox, -collisionNormal);
+            }
+        }
+
+        Bounce(collisionNormal);
     }
 
 
     void OnTriggerEnter2D(Collider2D collider)
     {
-        print("Enter1");
-
-        if (collider.gameObject.tag == "Enemy")
-        {
-            DamageHitbox enemyHitbox = collider.gameObject.GetComponent<DamageHitbox>();
-
-            print("Enter2");
-
-            if (enemyHitbox != null)
-            {
-                print("Enter3");
-
-                Vector2 direction = collider.transform.position - transform.position;
-                HitEnemy(enemyHitbox, direction);
-            }
-        }
+        print("Hey");
+        print(collider.gameObject.name);
+        print(collider.gameObject.tag);
     }
 
 
     void HitEnemy(DamageHitbox enemyHitbox, Vector2 direction)
     {
-        enemyHitbox.Hit(new HitInfo(-direction));
-        //enemyHitbox.Hit(new HitInfo(-collider.GetContact(0).normal));
+        enemyHitbox.Hit(new HitInfo(direction));
 
-        _consecutiveHits++;
-        _consecutiveHits = Mathf.Clamp(_consecutiveHits, 0, 3);
+        _consecutiveHits = Mathf.Clamp(_consecutiveHits++, 0, 3);
 
         if (_audioSource != null)
         {
