@@ -204,7 +204,6 @@ public class Boomerang : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        print("Colllision : " + collision.gameObject.tag);
         if (collision.gameObject.tag == "Player")
             return;
 
@@ -212,23 +211,17 @@ public class Boomerang : MonoBehaviour
 
         if (collision.gameObject.tag == "Enemy")
         {
+
             DamageHitbox enemyHitbox = collision.gameObject.GetComponent<DamageHitbox>();
 
             if (enemyHitbox != null)
             {
+                print("Achou hitbox");
                 HitEnemy(enemyHitbox, -collisionNormal);
             }
         }
 
         Bounce(collisionNormal);
-    }
-
-
-    void OnTriggerEnter2D(Collider2D collider)
-    {
-        print("Hey");
-        print(collider.gameObject.name);
-        print(collider.gameObject.tag);
     }
 
 

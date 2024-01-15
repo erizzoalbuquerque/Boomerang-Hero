@@ -4,14 +4,16 @@ using UnityEngine;
 
 public class EnemyAI : MonoBehaviour
 {
-    [SerializeField] Enemy _enemy;
-    [SerializeField] EnemyMovement _enemyMovement;
     [SerializeField] Hero _hero;
+    [SerializeField] Enemy _enemy;
 
-    [SerializeField] float _proximityThreshold = 2f;
+    [SerializeField] EnemyMovement _enemyMovement;
 
     [SerializeField] ContactAttackSkill _contactAttackSkill;
     [SerializeField] JumpAttackSkill _jumptAttackSkill;
+
+    [SerializeField] float _proximityThreshold = 2f;
+
 
     // Start is called before the first frame update
     void Start()
@@ -19,30 +21,33 @@ public class EnemyAI : MonoBehaviour
         
     }
 
+
     // Update is called once per frame
     void Update()
     {
-        float heroDistance = (_hero.transform.position - _enemy.transform.position).magnitude;
+        Vector2 heroDirection = _hero.transform.position - _enemy.transform.position;
 
-        if (heroDistance < _proximityThreshold)
+        if (heroDirection.magnitude < _proximityThreshold)
         {
-            Jump();
+            Jump(heroDirection);
 
         } else
         {
-            MoveTowardsHero();
+            MoveTowardsHero(heroDirection);
 
         }
         
     }
 
-    void Jump()
+
+    void Jump(Vector2 direction)
     {
-        _jumptAttackSkill.Do(_enemyMovement, _hero.transform.position - this.transform.position);
+        _jumptAttackSkill.Do(direction);
     }
 
-    void MoveTowardsHero()
+
+    void MoveTowardsHero(Vector2 direction)
     {
-        _enemyMovement.Move(_hero.transform.position - this.transform.position);
+        _enemyMovement.Move(direction);
     }
 }

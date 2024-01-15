@@ -742,6 +742,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _attackHitbox: {fileID: 190620605}
+  _enemyStagger: {fileID: 897945460}
+  _rb: {fileID: 897945451}
+  _jumpTime: 2
+  _jumpDistance: 8
+  _coolDown: 2
 --- !u!114 &190620605
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4732,8 +4737,11 @@ GameObject:
   - component: {fileID: 897945453}
   - component: {fileID: 897945456}
   - component: {fileID: 897945455}
+  - component: {fileID: 897945460}
   - component: {fileID: 897945452}
   - component: {fileID: 897945454}
+  - component: {fileID: 897945458}
+  - component: {fileID: 897945459}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Enemy
@@ -4755,7 +4763,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 126278678}
-  - {fileID: 2139713649}
   - {fileID: 1334270626}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4813,7 +4820,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d44219ae59915431e99f8ac5c245466f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _damageHitbox: {fileID: 1828015845}
+  _enemyStagger: {fileID: 897945460}
+  _damageHitbox: {fileID: 897945458}
+  _enemyMovement: {fileID: 897945455}
+  _contactAttackSkill: {fileID: 2137179665}
+  _jumptAttackSkill: {fileID: 190620604}
 --- !u!114 &897945454
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4897,14 +4908,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dbf586fc38828470994f4be13f3a0e0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemy: {fileID: 897945453}
   _rb: {fileID: 897945451}
+  _enemyStagger: {fileID: 897945460}
   _maxSpeed: 3
-  _staggerTime: 0.75
   _knockbackTime: 0.5
-  _knockbackDistance: 0.3
-  _jumpTime: 1
-  _jumpDistance: 3
+  _knockbackDistance: 1
 --- !u!114 &897945456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4917,12 +4925,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aaa8453b8183a49868a825b8eb227149, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _hero: {fileID: 1731978989}
   _enemy: {fileID: 897945453}
   _enemyMovement: {fileID: 897945455}
-  _hero: {fileID: 1731978989}
-  _proximityThreshold: 3
   _contactAttackSkill: {fileID: 2137179665}
   _jumptAttackSkill: {fileID: 190620604}
+  _proximityThreshold: 6
 --- !u!61 &897945457
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -4968,6 +4976,46 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2, y: 2}
   m_EdgeRadius: 0
+--- !u!114 &897945458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 897945447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e8414c3ec75b40858bfc353b61fb72b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &897945459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 897945447}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1feb40a441eef448697442fe9e837ed2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemyMovement: {fileID: 897945455}
+  _contactAttackSkill: {fileID: 2137179665}
+  _jumptAttackSkill: {fileID: 190620604}
+--- !u!114 &897945460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 897945447}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36db517768a4246698c924a9645281f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _staggerDuration: 2
 --- !u!1 &908352099
 GameObject:
   m_ObjectHideFlags: 0
@@ -6615,8 +6663,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1181405090}
-  - component: {fileID: 1181405092}
   - component: {fileID: 1181405091}
+  - component: {fileID: 1181405092}
   - component: {fileID: 1181405093}
   m_Layer: 7
   m_Name: Boomerang
@@ -10854,96 +10902,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!1 &1828015842
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1828015843}
-  - component: {fileID: 1828015846}
-  - component: {fileID: 1828015845}
-  m_Layer: 6
-  m_Name: DamageHitbox
-  m_TagString: Enemy
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1828015843
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1828015842}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 2139713649}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1828015845
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1828015842}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e8414c3ec75b40858bfc353b61fb72b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!61 &1828015846
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1828015842}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 2.2, y: 2.2}
-  m_EdgeRadius: 0
 --- !u!1 &1850706519
 GameObject:
   m_ObjectHideFlags: 0
@@ -17821,7 +17779,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2137179663
 Transform:
   m_ObjectHideFlags: 0
@@ -17895,6 +17853,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _attackHitbox: {fileID: 2137179666}
+  _enemyStagger: {fileID: 897945460}
 --- !u!114 &2137179666
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17912,38 +17871,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   isActive: 1
---- !u!1 &2139713648
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2139713649}
-  m_Layer: 0
-  m_Name: _Triggers
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2139713649
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2139713648}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1828015843}
-  m_Father: {fileID: 897945449}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

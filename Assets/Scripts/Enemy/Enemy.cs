@@ -7,12 +7,20 @@ using UnityEngine.Events;
 
 public class Enemy : MonoBehaviour
 {
+    [SerializeField] EnemyStagger _enemyStagger;
     [SerializeField] DamageHitbox _damageHitbox;
+    [SerializeField] EnemyMovement _enemyMovement;
+
+    [SerializeField] ContactAttackSkill _contactAttackSkill;
+    [SerializeField] JumpAttackSkill _jumptAttackSkill;
+
 
     // Start is called before the first frame update
     void Start()
     {
+
     }
+
 
     // Update is called once per frame
     void Update()
@@ -20,19 +28,27 @@ public class Enemy : MonoBehaviour
         
     }
 
+
     void OnEnable()
     {
         _damageHitbox.GotHit += ReceiveHit;
     }
+
 
     void OnDisable()
     {
         _damageHitbox.GotHit -= ReceiveHit;
     }
 
+
     void ReceiveHit(HitInfo hitInfo)
     {
-        print("Receive Hit");
+        _enemyStagger.Apply();
+        _enemyMovement.Knockback(hitInfo.Direction);
+
+        _contactAttackSkill.Halt();
+        _jumptAttackSkill.Halt();
+
         GetComponent<Blinking>().StartBlinking();
         GetComponent<Cinemachine.CinemachineImpulseSource>().GenerateImpulseWithForce(0.1f);
     }

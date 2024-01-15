@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class ContactAttackSkill : Skill
 {
+    [SerializeField] EnemyStagger _enemyStagger;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -15,4 +17,19 @@ public class ContactAttackSkill : Skill
     {
         
     }
+
+    public bool Do(Vector3 direction)
+    {
+        if (_enemyStagger.IsStaggered)
+            return false;
+
+        return true;
+    }
+
+
+    public void Halt()
+    {
+        
+    }
+
 }
