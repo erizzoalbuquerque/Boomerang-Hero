@@ -11,14 +11,12 @@ public class Enemy : MonoBehaviour
     [SerializeField] DamageHitbox _damageHitbox;
     [SerializeField] EnemyMovement _enemyMovement;
 
-    [SerializeField] ContactAttackSkill _contactAttackSkill;
-    [SerializeField] JumpAttackSkill _jumptAttackSkill;
-
+    List<Skill> _skills;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        _skills = new List<Skill>(GetComponentsInChildren<Skill>());
     }
 
 
@@ -46,8 +44,11 @@ public class Enemy : MonoBehaviour
         _enemyStagger.Apply();
         _enemyMovement.Knockback(hitInfo.Direction);
 
-        _contactAttackSkill.Halt();
-        _jumptAttackSkill.Halt();
+
+        for (int i = 0; i < _skills.Count; i++)
+        {
+            _skills[i].Halt();
+        }
 
         GetComponent<Blinking>().StartBlinking();
         GetComponent<Cinemachine.CinemachineImpulseSource>().GenerateImpulseWithForce(0.1f);

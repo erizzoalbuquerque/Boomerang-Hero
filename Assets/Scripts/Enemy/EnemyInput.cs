@@ -12,6 +12,7 @@ public class EnemyInput : MonoBehaviour
 
     [SerializeField] ContactAttackSkill _contactAttackSkill;
     [SerializeField] JumpAttackSkill _jumptAttackSkill;
+    [SerializeField] ShootSkill _shotSkill;
 
 
     // Start is called before the first frame update
@@ -31,7 +32,7 @@ public class EnemyInput : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Performed)
         {
-            _jumptAttackSkill.Do(_inputMaster.Player.Movement.ReadValue<Vector2>());
+            _shotSkill.Do(_inputMaster.Player.Movement.ReadValue<Vector2>());
         }
     }
 

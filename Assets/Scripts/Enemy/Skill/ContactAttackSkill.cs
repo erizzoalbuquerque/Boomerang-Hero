@@ -18,7 +18,7 @@ public class ContactAttackSkill : Skill
         
     }
 
-    public bool Do(Vector3 direction)
+    public override bool Do(Vector3 direction)
     {
         if (_enemyStagger.IsStaggered)
             return false;
@@ -27,7 +27,7 @@ public class ContactAttackSkill : Skill
     }
 
 
-    public void Halt()
+    public override void Halt()
     {
         
     }

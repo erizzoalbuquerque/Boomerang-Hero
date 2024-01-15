@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAI : MonoBehaviour
+public class BlobEnemyAI : MonoBehaviour
 {
     [SerializeField] Hero _hero;
     [SerializeField] Enemy _enemy;

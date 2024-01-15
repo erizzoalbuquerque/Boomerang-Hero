@@ -2,15 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Skill : MonoBehaviour
+public class Projectile : MonoBehaviour
 {
-    [SerializeField] protected AttackHitbox _attackHitbox;
+    [SerializeField] Rigidbody2D _rb;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
+
 
     // Update is called once per frame
     void Update()
@@ -18,14 +19,16 @@ public abstract class Skill : MonoBehaviour
         
     }
 
-    public virtual bool Do(Vector3 direction)
+
+    public void Initialize(Vector2 direction, float speed)
     {
-        return true;
+        _rb.velocity = direction.normalized * speed;
     }
 
 
-    public virtual void Halt()
+    public void DestroySelf()
     {
-        
+
+        GameObject.Destroy(this.gameObject);
     }
 }
