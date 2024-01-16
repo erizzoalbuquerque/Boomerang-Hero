@@ -14,12 +14,15 @@ public class ShootSkill : Skill
 
     float _coolDownStartTime = 0f;
 
+    Collider2D _collider2D;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        _collider2D = transform.root.gameObject.GetComponent<Collider2D>();
     }
+
 
     // Update is called once per frame
     void Update()
@@ -52,24 +55,26 @@ public class ShootSkill : Skill
     {
         _coolDownStartTime = Time.time;
 
-        Bounds bounds = transform.root.gameObject.GetComponent<Collider2D>().bounds;
-        Ray ray = new Ray(transform.position, direction);
+        Vector3 projectileOrigin = CalculateProjectileOrigin(direction);
 
-        Vector2 originPosition;
-        if (bounds.IntersectRay(ray, out float intersectionDistance))
-        {
-            // The ray intersects the bounds, and the intersection point is stored in the "intersection" variable
-            originPosition = transform.position + direction.normalized * (-intersectionDistance + 0.6f);
-            Debug.Log("Intersection point: " + intersectionDistance);
-        } else
-        {
-            originPosition = transform.position + direction.normalized * _startOriginDistance;
-        }
-
-        GameObject projectileInstance = Instantiate(_projectilePrefab, originPosition, Quaternion.identity);
+        GameObject projectileInstance = Instantiate(_projectilePrefab, projectileOrigin, Quaternion.identity);
 
         Projectile projectile = projectileInstance.GetComponent<Projectile>();
         projectile.Initialize(direction, _projectileSpeed);        
+    }
+
+
+    Vector3 CalculateProjectileOrigin(Vector3 direction)
+    {
+        Bounds bounds = _collider2D.bounds;
+        Ray ray = new Ray(transform.position, direction);
+
+        if (bounds.IntersectRay(ray, out float intersectionDistance))
+        {
+            return transform.position + (direction.normalized * (-intersectionDistance + 0.6f));
+        }
+
+        return transform.position + (direction.normalized * _startOriginDistance);
     }
 
 }

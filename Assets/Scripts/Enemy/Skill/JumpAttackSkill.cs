@@ -10,7 +10,8 @@ public class JumpAttackSkill : Skill
     [SerializeField] EnemyStagger _enemyStagger;
     [SerializeField] Rigidbody2D _rb;
 
-    [SerializeField] float _jumpTime = 1.5f;
+    [SerializeField] float _jumpDuration = 1.5f;
+    [SerializeField] float _jumpWaitDuration = 0.5f;
     [SerializeField] float _jumpDistance = 6f;
 
     [SerializeField] float _coolDown = 2f;
@@ -79,8 +80,10 @@ public class JumpAttackSkill : Skill
 
         _rb.velocity = Vector3.zero;
 
+        yield return new WaitForSeconds(_jumpWaitDuration);
+
         Vector3 jumpVector = this.transform.position + (Vector3)direction.normalized * _jumpDistance;
-        _tween = _rb.DOMove(jumpVector, _jumpTime).SetEase(Ease.OutCubic);
+        _tween = _rb.DOMove(jumpVector, _jumpDuration).SetEase(Ease.OutCubic);
 
         yield return _tween.WaitForCompletion();
 
