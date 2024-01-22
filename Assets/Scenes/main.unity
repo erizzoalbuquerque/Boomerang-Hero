@@ -84833,17 +84833,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8029783783646115150, guid: 00b8d88d45d16462cabf75134e6dbd0a, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: a43002c6b54fd49479f2e8e6f2b50336, type: 2}
     - target: {fileID: 8068680914422466315, guid: 00b8d88d45d16462cabf75134e6dbd0a, type: 3}
       propertyPath: m_Name
       value: ShooterEnemy
-      objectReference: {fileID: 0}
-    - target: {fileID: 8068680914422466315, guid: 00b8d88d45d16462cabf75134e6dbd0a, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -84862,10 +84854,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: BlobEnemy
       objectReference: {fileID: 0}
-    - target: {fileID: 3475120660371143220, guid: 6a2f230b0facd499a8babfb30a3c0136, type: 3}
-      propertyPath: m_Materials.Array.data[0]
-      value: 
-      objectReference: {fileID: 2100000, guid: a43002c6b54fd49479f2e8e6f2b50336, type: 2}
     - target: {fileID: 7575538101696306949, guid: 6a2f230b0facd499a8babfb30a3c0136, type: 3}
       propertyPath: _hero
       value: 

@@ -11,7 +11,9 @@ public class Enemy : MonoBehaviour
     [SerializeField] DamageHitbox _damageHitbox;
     [SerializeField] EnemyMovement _enemyMovement;
 
-    List<Skill> _skills;
+    public Action HitReceived;
+
+    List<Skill> _skills;    
 
     // Start is called before the first frame update
     void Start()
@@ -50,7 +52,6 @@ public class Enemy : MonoBehaviour
             _skills[i].Halt();
         }
 
-        GetComponent<Blinking>().StartBlinking();
-        GetComponent<Cinemachine.CinemachineImpulseSource>().GenerateImpulseWithForce(0.1f);
+        HitReceived?.Invoke();
     }
 }

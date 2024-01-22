@@ -4,8 +4,8 @@ using UnityEngine;
 public class Blinking : MonoBehaviour
 {
     [SerializeField] SpriteRenderer _spriteRenderer;
-    [SerializeField] float _duration = 1f;
-    [SerializeField] float _numberOfBlinks = 1f;
+    [SerializeField] float _duration = 0.6f;
+    [SerializeField] float _numberOfBlinks = 3f;
 
     bool _isBlinking;
     float _startBlinkingTime;
