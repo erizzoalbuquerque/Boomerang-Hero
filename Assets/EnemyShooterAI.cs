@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyShooterAI : MonoBehaviour
@@ -59,12 +60,12 @@ public class EnemyShooterAI : MonoBehaviour
     }
 
 
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(this.transform.position, _proximityShootingThreshold);
+        UnityEditor.Handles.color = Color.red;
+        UnityEditor.Handles.DrawWireDisc(this.transform.position,Vector3.forward, _proximityShootingThreshold);
 
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireSphere(this.transform.position, _proximityFleeThreshold);
+        UnityEditor.Handles.color = Color.yellow;
+        UnityEditor.Handles.DrawWireDisc(this.transform.position,Vector3.forward, _proximityFleeThreshold);
     }
 }

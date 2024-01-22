@@ -76,6 +76,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1fbe8a63afdae43a1875fb536e64edf9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _attackHitbox: {fileID: 0}
   _enemyStagger: {fileID: 6128439740178040972}
   _projectilePrefab: {fileID: 5811373150269136498, guid: 6f12d812b9f644bf98bd027d6e172f99, type: 3}
   _projectileSpeed: 6
@@ -282,7 +283,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -444,8 +445,6 @@ MonoBehaviour:
   _enemyStagger: {fileID: 6128439740178040972}
   _damageHitbox: {fileID: 4345011729252235583}
   _enemyMovement: {fileID: 1036317869758108790}
-  _contactAttackSkill: {fileID: 1974368447222719774}
-  _jumptAttackSkill: {fileID: 0}
 --- !u!114 &3191632144594709024
 MonoBehaviour:
   m_ObjectHideFlags: 0
