@@ -37,6 +37,12 @@ public class Hero : MonoBehaviour
         _boomerang.Throw(nomalizedDirection, startPosition);
     }
 
+    public void Teleport()
+    {
+        if (_boomerang.CanBePulled && _boomerang.IsThrown)
+            this.transform.position = _boomerang.transform.position;
+    }
+
 
     // Private Methods
 

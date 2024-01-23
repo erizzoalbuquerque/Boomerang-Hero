@@ -7,7 +7,6 @@ using UnityEngine.InputSystem;
 public class HeroInput : MonoBehaviour
 {
     [SerializeField] InputMaster _inputMaster;
-
     [SerializeField] Hero _hero;
     [SerializeField] HeroMovement _heroMovement;
     [SerializeField] Boomerang _boomerang;
@@ -35,16 +34,26 @@ public class HeroInput : MonoBehaviour
         }
     }
 
+    public void OnSpecial(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Performed)
+        {
+            _hero.Teleport();
+        }
+    }
+
 
     private void OnEnable()
     {
         _inputMaster.Player.Fire.performed += OnFire;
+        _inputMaster.Player.Special.performed += OnSpecial;
     }
 
 
     private void OnDisable()
     {
         _inputMaster.Player.Fire.performed -= OnFire;
+        _inputMaster.Player.Special.performed -= OnSpecial;
     }
 }
 

@@ -48,6 +48,10 @@ public class Boomerang : MonoBehaviour
 
     int _consecutiveHits = 0;
 
+    public bool IsThrown { get => _isThrown;}
+    public bool IsBeingPulled { get => _isBeingPulled; }
+    public bool CanBePutAway { get => _canBePutAway; }
+    public bool CanBePulled { get => _canBePulled; }
 
     void Awake()
     {
