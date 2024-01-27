@@ -146,6 +146,9 @@ public class Boomerang : MonoBehaviour
         // Turn on physics
         _rb.simulated = true;
 
+        //Detach from hero
+        this.transform.parent = null;
+
         // Set velocity vector 2
         _rb.velocity = direction.normalized * _regularMaxSpeed;
 
@@ -184,6 +187,10 @@ public class Boomerang : MonoBehaviour
 
         // Turn off physics
         _rb.simulated = false;
+
+        //Attach to Hero
+        this.transform.parent = _hero.transform;
+
 
         for (int i = 0; i < transform.childCount; i++)
         {
