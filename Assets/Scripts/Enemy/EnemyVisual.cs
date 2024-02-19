@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class Skill : MonoBehaviour
+public class EnemyVisual : MonoBehaviour
 {
-    [SerializeField] protected BaseCharacterController _character;
+    [SerializeField] BaseCharacterController _enemy;
 
     // Start is called before the first frame update
     void Start()
@@ -14,16 +14,6 @@ public abstract class Skill : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
-        
-    }
-
-    public virtual bool Execute(Vector3 direction)
-    {
-        return true;
-    }
-
-    public virtual void Cancel()
     {
         
     }

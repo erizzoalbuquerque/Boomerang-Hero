@@ -7,8 +7,8 @@ using UnityEngine;
 
 public class JumpAttackSkill : Skill
 {
-    [SerializeField] EnemyStagger _enemyStagger;
     [SerializeField] Rigidbody2D _rb;
+    [SerializeField] AttackHitbox _attackHitbox;
 
     [SerializeField] float _jumpDuration = 1.5f;
     [SerializeField] float _jumpWaitDuration = 0.5f;
@@ -35,10 +35,9 @@ public class JumpAttackSkill : Skill
         
     }
 
-
-    public override bool Do(Vector3 direction)
+    public override bool Execute(Vector3 direction)
     {
-        if (_enemyStagger.IsStaggered)
+        if (_character.IsStaggered)
             return false;
 
         if (Time.time - _coolDownStartTime < _coolDown)
@@ -50,8 +49,10 @@ public class JumpAttackSkill : Skill
     }
 
 
-    public override void Halt()
+    public override void Cancel()
     {
+        base.Cancel();
+
         if (_coroutine == null)
             return;
 
@@ -67,10 +68,9 @@ public class JumpAttackSkill : Skill
 
     void ApplyJump(Vector2 direction)
     {
-        Halt();
+        Cancel();
         _coroutine = StartCoroutine(JumpCoroutine(direction));
     }
-
 
     IEnumerator JumpCoroutine(Vector2 direction)
     {

@@ -5,21 +5,20 @@ using UnityEngine;
 
 public class EnemyShooterAI : MonoBehaviour
 {
-    [SerializeField] Hero _hero;
-    [SerializeField] Enemy _enemy;
-
-    [SerializeField] EnemyMovement _enemyMovement;
+    [SerializeField] BaseCharacterController _enemy;
 
     [SerializeField] ShootSkill _shootSkill;
 
     [SerializeField] float _proximityShootingThreshold = 10f;
     [SerializeField] float _proximityFleeThreshold = 5f;
 
+    Hero _hero;
+
 
     // Start is called before the first frame update
     void Start()
     {
-
+        _hero = GameManager.Instance.Hero;
     }
 
 
@@ -50,13 +49,13 @@ public class EnemyShooterAI : MonoBehaviour
 
     void Shoot(Vector2 direction)
     {
-        _shootSkill.Do(direction);
+        _shootSkill.Execute(direction);
     }
 
 
     void MoveTowardsHero(Vector2 direction)
     {
-        _enemyMovement.Move(direction);
+        _enemy.Move(direction);
     }
 
 

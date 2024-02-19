@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8121976182960597997}
   - component: {fileID: 2323735688796611823}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Trail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -73,7 +73,7 @@ TrailRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Time: 0.5
   m_PreviewTimeScale: 1
   m_Parameters:
@@ -159,7 +159,7 @@ GameObject:
   - component: {fileID: 6665072164685270533}
   - component: {fileID: 1491448323385439717}
   - component: {fileID: 4060259186915416543}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Projectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -256,11 +256,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df6798760c61e4cf49f5805e67b95ad8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isActive: 1
   _intensity: 1
-  _layerMask:
+  _whatIsHittable:
     serializedVersion: 2
     m_Bits: 64
-  _collidedWithHit:
+  _whatIsSolid:
+    serializedVersion: 2
+    m_Bits: 193
+  _collidedWithHittable:
+    m_PersistentCalls:
+      m_Calls: []
+  _collidedWithSolid:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1491448323385439717}
@@ -275,22 +282,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  _collidedWithAnythingButLayer:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1491448323385439717}
-        m_TargetAssemblyTypeName: Projectile, Assembly-CSharp
-        m_MethodName: DestroySelf
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  isActive: 1
 --- !u!114 &1491448323385439717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -342,7 +333,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7739661732909343493}
   - component: {fileID: 6951197353687315546}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Circle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -405,7 +396,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 10
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 1, g: 0.8518007, b: 0, a: 1}
   m_FlipX: 0

@@ -11,6 +11,7 @@ public class Boomerang : MonoBehaviour
     [SerializeField] Rigidbody2D _rb;
     [SerializeField] Hero _hero;
     [SerializeField] AudioSource _audioSource;
+    [SerializeField] Cinemachine.CinemachineImpulseSource _cinemachineImpulseSource;
 
     [Header("Regular Settings")]
     [SerializeField] float _regularMaxSpeed = 1f;
@@ -227,7 +228,6 @@ public class Boomerang : MonoBehaviour
 
             if (enemyHitbox != null)
             {
-                print("Achou hitbox");
                 HitEnemy(enemyHitbox, -collisionNormal);
             }
         }
@@ -247,6 +247,8 @@ public class Boomerang : MonoBehaviour
             _audioSource.pitch = 1f + _consecutiveHits * 0.3f;
             _audioSource.Play();
         }
+
+        _cinemachineImpulseSource?.GenerateImpulseWithForce(0.1f);
     }
 
 

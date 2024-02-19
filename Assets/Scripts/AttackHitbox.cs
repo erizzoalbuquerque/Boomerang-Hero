@@ -5,42 +5,43 @@ using UnityEngine.Events;
 
 public class AttackHitbox : MonoBehaviour
 {
+    [SerializeField] bool _isActive = true;
     [SerializeField] float _intensity = 1f;
-    [SerializeField] LayerMask _layerMask;
+    [SerializeField] LayerMask _whatIsHittable;
+    [SerializeField] LayerMask _whatIsSolid;
 
-    [SerializeField] UnityEvent _collidedWithHit;
-    [SerializeField] UnityEvent _collidedWithAnythingButLayer;
+    [SerializeField] UnityEvent _collidedWithHittable;
+    [SerializeField] UnityEvent _collidedWithSolid;
 
-    public bool isActive = true;
+    public bool IsActive { get => _isActive; set => _isActive = value; }
 
     private void Awake()
     {
-        isActive = true;
+        _isActive = true;
     }
 
     void OnTriggerEnter2D(Collider2D c)
     {
-        if (!isActive)
+        if (!_isActive)
             return;
 
+        //Ignore Collision if both objects are under the same tree
         if (this.transform.root == c.gameObject.transform.root)
             return;
 
-        if (!_layerMask.Contains(c.gameObject.layer))
+        if (_whatIsHittable.Contains(c.gameObject.layer))
         {
-            _collidedWithAnythingButLayer.Invoke();
-            return;
+            DamageHitbox damageable = c.GetComponent<DamageHitbox>();
+            if (damageable != null)
+            {
+                damageable.Hit(new HitInfo(c.transform.position - this.transform.position, _intensity));
+                _collidedWithHittable.Invoke();
+            }
         }
 
-        DamageHitbox damageable = c.GetComponent<DamageHitbox>();
-        if (damageable == null)
+        if (_whatIsSolid.Contains(c.gameObject.layer))
         {
-            _collidedWithAnythingButLayer.Invoke();
-            return;
-        }
-
-        damageable.Hit(new HitInfo(c.transform.position - this.transform.position, _intensity));
-
-        _collidedWithHit.Invoke();
+            _collidedWithSolid.Invoke();
+        }        
     }
 }

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class ShootSkill : Skill
 {
-    [SerializeField] EnemyStagger _enemyStagger;
     [SerializeField] GameObject _projectilePrefab;
 
     [SerializeField] float _projectileSpeed = 6f;
@@ -31,9 +30,9 @@ public class ShootSkill : Skill
     }
 
 
-    public override bool Do(Vector3 direction)
+    public override bool Execute(Vector3 direction)
     {
-        if (_enemyStagger.IsStaggered)
+        if (_character.IsStaggered)
             return false;
 
         if (Time.time - _coolDownStartTime < _coolDown)
@@ -45,8 +44,9 @@ public class ShootSkill : Skill
     }
 
 
-    public override void Halt()
+    public override void Cancel()
     {
+        base.Cancel();
         _coolDownStartTime = 0f;
     }
 
