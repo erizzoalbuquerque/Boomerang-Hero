@@ -4,8 +4,7 @@ using UnityEngine;
 public class Blinking : MonoBehaviour
 {
     [SerializeField] SpriteRenderer _spriteRenderer;
-    [SerializeField] float _duration = 0.6f;
-    [SerializeField] float _numberOfBlinks = 3f;
+    [SerializeField] float _frequency = 5f;
 
     bool _isBlinking;
     float _startBlinkingTime;
@@ -22,20 +21,13 @@ public class Blinking : MonoBehaviour
             return; 
 
         float time = Time.time - _startBlinkingTime;
-        if (time <= _duration || _duration < 0f)
-        {
-            //Blink
-            float value = Mathf.Sin(time * _numberOfBlinks/_duration * 2 * Mathf.PI);
 
-            if (value >= 0)
-                _spriteRenderer.enabled = false;
-            else
-                _spriteRenderer.enabled = true;
-        }
+        float value = Mathf.Sin(time * _frequency * 2 * Mathf.PI);
+
+        if (value >= 0)
+            _spriteRenderer.enabled = false;
         else
-        {
-            StopBlinking();
-        }
+            _spriteRenderer.enabled = true;
     }
 
     [ContextMenu("StartBlinking")]

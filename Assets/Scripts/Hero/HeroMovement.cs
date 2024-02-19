@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,13 +6,14 @@ using UnityEngine;
 public class HeroMovement : MonoBehaviour
 {
     [SerializeField] float _maxSpeed = 4f;
+    [SerializeField] float _knockbackDuration = 0.5f;
+    [SerializeField] float _knockbackDistance = 0.3f;
 
     Rigidbody2D _rb;
     Vector2 _movingDirection;
-    Vector2 _lastNonZeroDirection;
+
 
     public Vector2 MovingDirection { get => _movingDirection; }
-    public Vector2 LastNonZeroDirection { get => _lastNonZeroDirection; }
 
 
     // Reserverd Methods
@@ -25,39 +27,28 @@ public class HeroMovement : MonoBehaviour
     void Start()
     {
         _movingDirection = Vector2.zero;
-        _lastNonZeroDirection = Vector2.up;
     }
-
-
-    void Update()
-    {
-
-    }
-
-
-    void FixedUpdate()
-    {
-        Move();
-    }
-
 
     // Public Methods
 
-    public void SetDirection(Vector2 direction)
+    public void Move(Vector2 direction)
     {
         _movingDirection = direction.normalized;
-
-        if (_movingDirection != Vector2.zero)
-        {
-            _lastNonZeroDirection = _movingDirection;
-        }
+        _rb.velocity = _movingDirection * _maxSpeed;
     }
 
-
-    // Private Methods
-
-    void Move()
+    public void ApplyKnockback(Vector2 direction)
     {
-        _rb.velocity = _movingDirection * _maxSpeed;
+        StartCoroutine(KnockbackCoroutine(direction));
+    }
+
+    IEnumerator KnockbackCoroutine(Vector2 direction)
+    {
+        _rb.velocity = Vector3.zero;
+
+        Vector3 knockBackVector = this.transform.position + (Vector3)direction.normalized * _knockbackDistance;
+        Tween tween = _rb.DOMove(knockBackVector, _knockbackDuration).SetEase(Ease.OutCubic);
+
+        yield return tween.WaitForCompletion();
     }
 }

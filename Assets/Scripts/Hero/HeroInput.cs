@@ -8,7 +8,6 @@ public class HeroInput : MonoBehaviour
 {
     [SerializeField] InputMaster _inputMaster;
     [SerializeField] Hero _hero;
-    [SerializeField] HeroMovement _heroMovement;
     [SerializeField] Boomerang _boomerang;
 
     // Start is called before the first frame update
@@ -21,7 +20,7 @@ public class HeroInput : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _heroMovement.SetDirection(_inputMaster.Player.Movement.ReadValue<Vector2>());
+        _hero.Move(_inputMaster.Player.Movement.ReadValue<Vector2>());
     }
 
 
