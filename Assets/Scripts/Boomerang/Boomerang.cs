@@ -1,9 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
 using UnityEngine;
-using static UnityEngine.EventSystems.EventTrigger;
 
 public class Boomerang : MonoBehaviour
 {
@@ -21,8 +16,8 @@ public class Boomerang : MonoBehaviour
     [SerializeField] float _pullingMaxSpeed = 1f;
 
     [Header("Flying Settings")]
-    [SerializeField] float _baseFlyingTime = 5f;
-    [SerializeField] float _baseFlyingMultiplierAfterBounce = 0.5f;
+    [SerializeField] float _expectedFlyingDuration = 5f;
+    [SerializeField] float _flyingDurationFractionAfterBounce = 0.5f;
     [SerializeField] AnimationCurve _maxSpeedMultiplierCurve;
     [SerializeField] AnimationCurve _turningSpeedMultiplierCurve;
 
@@ -37,7 +32,7 @@ public class Boomerang : MonoBehaviour
     Vector2 _velocityAfterUpdate;
     Vector2 _desiredVelocity;
 
-    float _modifiedBaseFlyingTime;
+    float _modifiedFlyingDuration;
 
     bool _isThrown;
     bool _isBeingPulled;
@@ -103,7 +98,7 @@ public class Boomerang : MonoBehaviour
         }
         else
         {
-            float evalValue = Mathf.Clamp01(_timeSinceThrown / _modifiedBaseFlyingTime);
+            float evalValue = Mathf.Clamp01(_timeSinceThrown / _modifiedFlyingDuration);
 
             float modifiedRegularMaxSpeed = _regularMaxSpeed * _maxSpeedMultiplierCurve.Evaluate(evalValue);
             float modifiedRegularTurningSpeed = _regularTurningSpeed * _turningSpeedMultiplierCurve.Evaluate(evalValue);
@@ -173,7 +168,7 @@ public class Boomerang : MonoBehaviour
         _timeSinceThrown = 0f;
 
         // Flying initial state
-        _modifiedBaseFlyingTime = _baseFlyingTime;
+        _modifiedFlyingDuration = _expectedFlyingDuration;
 
         _isThrown = true;
     }
@@ -258,7 +253,7 @@ public class Boomerang : MonoBehaviour
         _rb.velocity = Vector2.Reflect(_velocityAfterUpdate, normalDirection);
 
         _timeSinceThrown = 0f;
-        _modifiedBaseFlyingTime = _baseFlyingTime * _baseFlyingMultiplierAfterBounce;
+        _modifiedFlyingDuration = _expectedFlyingDuration * _flyingDurationFractionAfterBounce;
 
         _isBeingPulled = false;
 
