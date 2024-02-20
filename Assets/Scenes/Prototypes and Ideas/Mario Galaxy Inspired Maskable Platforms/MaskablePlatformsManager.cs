@@ -5,7 +5,7 @@ using UnityEngine;
 public class MaskablePlatformsManager : MonoBehaviour
 {
     [SerializeField] MaskablePlatformsMask mask;
-    [SerializeField] Hero hero;
+    [SerializeField] HeroController hero;
     
     List<MaskablePlatform> _platforms;
 

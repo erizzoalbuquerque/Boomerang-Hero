@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class HeroVisual : MonoBehaviour
 {
-    [SerializeField] Hero _hero;
-    [SerializeField] HeroMovement _heroMovement;
+    [SerializeField] HeroController _hero;
+    [SerializeField] Movement _heroMovement;
     [SerializeField] SpriteRenderer _heroSprite;
     [SerializeField] Animator _heroAnimator;
     [SerializeField] Blinking _blinking;

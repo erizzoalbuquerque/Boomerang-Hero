@@ -12,7 +12,7 @@ public class BlobEnemyAI : MonoBehaviour
 
     [SerializeField] float _jumpAttackCooldown = 3f;
 
-    Hero _hero;
+    HeroController _hero;
     float _lastJumpAttackTime;
 
 

@@ -9,7 +9,7 @@ public class Boomerang : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] Rigidbody2D _rb;
-    [SerializeField] Hero _hero;
+    [SerializeField] HeroController _hero;
     [SerializeField] AudioSource _audioSource;
     [SerializeField] Cinemachine.CinemachineImpulseSource _cinemachineImpulseSource;
 
@@ -190,6 +190,7 @@ public class Boomerang : MonoBehaviour
         _rb.simulated = false;
 
         //Attach to Hero
+        this.transform.position = _hero.transform.position;
         this.transform.parent = _hero.transform;
 
 

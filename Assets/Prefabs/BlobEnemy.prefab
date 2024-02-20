@@ -538,7 +538,7 @@ MonoBehaviour:
   _attackHitbox: {fileID: 4204494027167175599}
   _jumpDuration: 1.5
   _jumpWaitDuration: 0.5
-  _jumpDistance: 6
+  _jumpDistance: 4
   _coolDown: 2
 --- !u!1 &5771677013489454147
 GameObject:

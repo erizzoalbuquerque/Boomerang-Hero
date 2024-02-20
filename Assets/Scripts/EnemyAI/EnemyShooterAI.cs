@@ -12,7 +12,7 @@ public class EnemyShooterAI : MonoBehaviour
     [SerializeField] float _proximityShootingThreshold = 10f;
     [SerializeField] float _proximityFleeThreshold = 5f;
 
-    Hero _hero;
+    HeroController _hero;
 
 
     // Start is called before the first frame update

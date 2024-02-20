@@ -5,16 +5,16 @@ using UnityEngine;
 public class BaseCharacterController : MonoBehaviour
 {
     [Header("References")]
-    [SerializeField] Movement _movement;
-    [SerializeField] DamageHitbox _damageHitbox;
+    [SerializeField] protected Movement _movement;
+    [SerializeField] protected DamageHitbox _damageHitbox;
 
     [Header("Settings")]
-    [SerializeField] float _invencibilityDuration = 0.5f;
-    [SerializeField] float _staggerDuration = 0.3f;
+    [SerializeField] protected float _invencibilityDuration = 0.5f;
+    [SerializeField] protected float _staggerDuration = 0.3f;
 
-    Vector2 _lastNonZeroInputDirection;
-    bool _isStaggered = false;
-    bool _isInvencible = false;
+    protected Vector2 _lastNonZeroInputDirection;
+    protected bool _isStaggered = false;
+    protected bool _isInvencible = false;
 
 
     //Coroutines

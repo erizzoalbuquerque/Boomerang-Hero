@@ -7,7 +7,7 @@ using UnityEngine.InputSystem;
 public class HeroInput : MonoBehaviour
 {
     [SerializeField] InputMaster _inputMaster;
-    [SerializeField] Hero _hero;
+    [SerializeField] HeroController _hero;
     [SerializeField] Boomerang _boomerang;
 
     // Start is called before the first frame update
