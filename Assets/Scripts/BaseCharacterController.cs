@@ -5,6 +5,7 @@ using UnityEngine;
 public class BaseCharacterController : MonoBehaviour
 {
     [Header("References")]
+    [SerializeField] protected Health _health;
     [SerializeField] protected Movement _movement;
     [SerializeField] protected DamageHitbox _damageHitbox;
 
@@ -73,6 +74,8 @@ public class BaseCharacterController : MonoBehaviour
     {
         if (_isInvencible == true)
             return;
+
+        _health?.ApplyDamage(hitInfo.Instensity);
 
         _movement.ApplyKnockback(hitInfo.Direction);
 

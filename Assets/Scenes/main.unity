@@ -78881,10 +78881,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: ShooterEnemy
       objectReference: {fileID: 0}
-    - target: {fileID: 8068680914422466315, guid: 00b8d88d45d16462cabf75134e6dbd0a, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -78901,6 +78897,18 @@ PrefabInstance:
     - target: {fileID: 1176048758724375882, guid: eed9e88f204ff1248946826bc23c54db, type: 3}
       propertyPath: m_Name
       value: _Hero + Boomerang
+      objectReference: {fileID: 0}
+    - target: {fileID: 1969932999629874113, guid: eed9e88f204ff1248946826bc23c54db, type: 3}
+      propertyPath: _maxSpeedMultiplierCurve.m_Curve.Array.data[0].value
+      value: 1.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1969932999629874113, guid: eed9e88f204ff1248946826bc23c54db, type: 3}
+      propertyPath: _maxSpeedMultiplierCurve.m_Curve.Array.data[0].inSlope
+      value: -3.9999998
+      objectReference: {fileID: 0}
+    - target: {fileID: 1969932999629874113, guid: eed9e88f204ff1248946826bc23c54db, type: 3}
+      propertyPath: _maxSpeedMultiplierCurve.m_Curve.Array.data[0].outSlope
+      value: -3.9999998
       objectReference: {fileID: 0}
     - target: {fileID: 7585907856259400495, guid: eed9e88f204ff1248946826bc23c54db, type: 3}
       propertyPath: m_LocalPosition.x

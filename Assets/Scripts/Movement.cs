@@ -11,7 +11,7 @@ public class Movement : MonoBehaviour
 
     Rigidbody2D _rb;
     Vector2 _movingDirection;
-
+    Tween _knockbackTween;
 
     public Vector2 MovingDirection { get => _movingDirection; }
 
@@ -47,8 +47,16 @@ public class Movement : MonoBehaviour
         _rb.velocity = Vector3.zero;
 
         Vector3 knockBackVector = this.transform.position + (Vector3)direction.normalized * _knockbackDistance;
-        Tween tween = _rb.DOMove(knockBackVector, _knockbackDuration).SetEase(Ease.OutCubic);
+        _knockbackTween = _rb.DOMove(knockBackVector, _knockbackDuration).SetEase(Ease.OutCubic);
 
-        yield return tween.WaitForCompletion();
+        yield return _knockbackTween.WaitForCompletion();
+    }
+
+    private void OnDestroy()
+    {
+        if (_knockbackTween != null) 
+        {
+            _knockbackTween.Kill();
+        }
     }
 }

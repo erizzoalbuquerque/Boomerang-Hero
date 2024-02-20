@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8057749629769499851}
   - component: {fileID: 7369654913085145415}
   - component: {fileID: 5875644275163588162}
+  - component: {fileID: 8193622657570438872}
   - component: {fileID: 8260732753588174070}
   - component: {fileID: 6066008806048782331}
   - component: {fileID: 3800013127424218131}
@@ -119,6 +120,19 @@ PolygonCollider2D:
       - {x: 0.7545376, y: 0.007585044}
       - {x: 0.37732124, y: 0.65449196}
   m_UseDelaunayMesh: 0
+--- !u!114 &8193622657570438872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 597770696404346800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca961570d8a051948823e9055a3db801, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _health: 2
 --- !u!114 &8260732753588174070
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131,6 +145,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c16ef2125f08424f824e16485fbba80, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _health: {fileID: 0}
   _movement: {fileID: 6066008806048782331}
   _damageHitbox: {fileID: 3800013127424218131}
   _invencibilityDuration: 0.5
