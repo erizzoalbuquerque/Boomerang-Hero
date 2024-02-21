@@ -560,6 +560,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: 5
+  _explosionPrefab: {fileID: 5754198211193893871, guid: ae790b6a0985d7b478d34c0274abe632, type: 3}
 --- !u!114 &4293971106778746941
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -574,7 +575,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _maxSpeed: 2
   _knockbackDuration: 0.5
-  _knockbackDistance: 1
+  _knockbackDistance: 0.5
 --- !u!114 &4345011729252235583
 MonoBehaviour:
   m_ObjectHideFlags: 0

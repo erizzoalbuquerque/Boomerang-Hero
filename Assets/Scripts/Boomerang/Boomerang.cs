@@ -7,6 +7,8 @@ public class Boomerang : MonoBehaviour
     [SerializeField] HeroController _hero;
     [SerializeField] AudioSource _audioSource;
     [SerializeField] Cinemachine.CinemachineImpulseSource _cinemachineImpulseSource;
+    [SerializeField] GameObject BoomeranImpactSmallPrefab;
+    [SerializeField] GameObject BoomeranImpactBigPrefab;
 
     [Header("Regular Settings")]
     [SerializeField] float _regularMaxSpeed = 1f;
@@ -165,7 +167,9 @@ public class Boomerang : MonoBehaviour
         _canBePutAway = false;
         Invoke("SetTrueCanBePutAway", _secondsBeforeCanBePutAway);
 
+        // Setting up variables
         _timeSinceThrown = 0f;
+        _consecutiveHits = 0;
 
         // Flying initial state
         _modifiedFlyingDuration = _expectedFlyingDuration;
@@ -193,8 +197,6 @@ public class Boomerang : MonoBehaviour
         {
             transform.GetChild(i).gameObject.SetActive(false);
         }
-
-        _consecutiveHits = 0;
     }
 
 
@@ -234,9 +236,8 @@ public class Boomerang : MonoBehaviour
 
     void HitEnemy(DamageHitbox enemyHitbox, Vector2 direction)
     {
-        enemyHitbox.Hit(new HitInfo(direction));
-
-        _consecutiveHits = Mathf.Clamp(_consecutiveHits++, 0, 3);
+        _consecutiveHits++;
+        _consecutiveHits = Mathf.Clamp(_consecutiveHits, 0, 3);
 
         if (_audioSource != null)
         {
@@ -244,7 +245,30 @@ public class Boomerang : MonoBehaviour
             _audioSource.Play();
         }
 
-        _cinemachineImpulseSource?.GenerateImpulseWithForce(0.1f);
+        float intensity;
+        if (_consecutiveHits == 1)
+        {
+            intensity = 1;
+        }
+        else if (_consecutiveHits == 2)
+        {
+            intensity = 2;
+            _cinemachineImpulseSource?.GenerateImpulseWithForce(0.07f);
+            if (BoomeranImpactSmallPrefab != null)
+                Instantiate(BoomeranImpactSmallPrefab, this.transform.position, Quaternion.identity);
+        }
+        else
+        {
+            intensity = 3;
+            _cinemachineImpulseSource?.GenerateImpulseWithForce(0.15f);
+            if (BoomeranImpactSmallPrefab != null)
+                Instantiate(BoomeranImpactSmallPrefab, this.transform.position, Quaternion.identity);
+            if (BoomeranImpactBigPrefab != null)
+                Instantiate(BoomeranImpactBigPrefab, this.transform.position, Quaternion.identity);
+        }
+
+        enemyHitbox.Hit(new HitInfo(direction,intensity));
+        print(intensity);
     }
 
 

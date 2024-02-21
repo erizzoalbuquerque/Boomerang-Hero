@@ -31,4 +31,9 @@ public class Timer : MonoBehaviour
     {
         _timer = _duration;
     }
+
+    public void KillGameObject()
+    {
+        Destroy(gameObject);
+    }
 }

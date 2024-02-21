@@ -78780,10 +78780,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: BlobEnemy
       objectReference: {fileID: 0}
-    - target: {fileID: 597770696404346800, guid: 6a2f230b0facd499a8babfb30a3c0136, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8057749629769499851, guid: 6a2f230b0facd499a8babfb30a3c0136, type: 3}
       propertyPath: m_LocalPosition.x
       value: 7.79
@@ -78876,6 +78872,10 @@ PrefabInstance:
     - target: {fileID: 4143280116378690774, guid: 00b8d88d45d16462cabf75134e6dbd0a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4293971106778746941, guid: 00b8d88d45d16462cabf75134e6dbd0a, type: 3}
+      propertyPath: _knockbackDistance
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8068680914422466315, guid: 00b8d88d45d16462cabf75134e6dbd0a, type: 3}
       propertyPath: m_Name
