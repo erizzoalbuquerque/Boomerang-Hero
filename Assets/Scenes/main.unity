@@ -78873,10 +78873,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4293971106778746941, guid: 00b8d88d45d16462cabf75134e6dbd0a, type: 3}
-      propertyPath: _knockbackDistance
-      value: 0.5
-      objectReference: {fileID: 0}
     - target: {fileID: 8068680914422466315, guid: 00b8d88d45d16462cabf75134e6dbd0a, type: 3}
       propertyPath: m_Name
       value: ShooterEnemy
@@ -78899,6 +78895,10 @@ PrefabInstance:
       value: _Hero + Boomerang
       objectReference: {fileID: 0}
     - target: {fileID: 1969932999629874113, guid: eed9e88f204ff1248946826bc23c54db, type: 3}
+      propertyPath: _audioSource
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1969932999629874113, guid: eed9e88f204ff1248946826bc23c54db, type: 3}
       propertyPath: _maxSpeedMultiplierCurve.m_Curve.Array.data[0].value
       value: 1.8
       objectReference: {fileID: 0}
@@ -78910,6 +78910,10 @@ PrefabInstance:
       propertyPath: _maxSpeedMultiplierCurve.m_Curve.Array.data[0].outSlope
       value: -3.9999998
       objectReference: {fileID: 0}
+    - target: {fileID: 2824469896198468410, guid: eed9e88f204ff1248946826bc23c54db, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 9b2386425eb2e9c4db40a74cc0d98b69, type: 3}
     - target: {fileID: 7585907856259400495, guid: eed9e88f204ff1248946826bc23c54db, type: 3}
       propertyPath: m_LocalPosition.x
       value: 6.3873734

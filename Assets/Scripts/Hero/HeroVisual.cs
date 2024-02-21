@@ -13,6 +13,7 @@ public class HeroVisual : MonoBehaviour
     bool _flipped = false;
 
     bool _wasInvencibleLastFrame;
+    bool _wasStaggeredLastFrame;
 
     // Start is called before the first frame update
     void Start()
@@ -47,5 +48,7 @@ public class HeroVisual : MonoBehaviour
             _blinking.StopBlinking();
             _wasInvencibleLastFrame = false;
         }
+
+        _heroAnimator.SetBool("IsStaggered", _hero.IsStaggered);
     }
 }
