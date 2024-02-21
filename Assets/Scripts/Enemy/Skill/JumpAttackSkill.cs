@@ -35,6 +35,11 @@ public class JumpAttackSkill : Skill
         
     }
 
+    private void OnDestroy()
+    {
+        _tween?.Kill();
+    }
+
     public override bool Execute(Vector3 direction)
     {
         if (_character.IsStaggered)
