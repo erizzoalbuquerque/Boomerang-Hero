@@ -7,8 +7,10 @@ public class Boomerang : MonoBehaviour
     [SerializeField] HeroController _hero;
     [SerializeField] AudioSource _audioSource;
     [SerializeField] Cinemachine.CinemachineImpulseSource _cinemachineImpulseSource;
-    [SerializeField] GameObject BoomeranImpactSmallPrefab;
-    [SerializeField] GameObject BoomeranImpactBigPrefab;
+    [SerializeField] GameObject _hideWhenInactiveObject;
+    [SerializeField] GameObject _boomerangImpactSmallPrefab;
+    [SerializeField] GameObject _boomerangImpactBigPrefab;
+    [SerializeField] BoomerangTeleportParticles _boomerangTeleportParticles;
 
     [Header("Regular Settings")]
     [SerializeField] float _regularMaxSpeed = 1f;
@@ -26,6 +28,8 @@ public class Boomerang : MonoBehaviour
     [Header("Details")]
     [SerializeField] float _secondsBeforeCanBePutAway = 1f;
     [SerializeField] float _secondsBeforeCanBePulled = 0.1f;
+    [SerializeField] int _consecutiveHitsOnSolidObjectsToBreak = 5;
+    [SerializeField] float _cooldownAfterBroke = 1f;
 
     [Header("Debug")]
     [SerializeField] bool _debug = false;
@@ -44,13 +48,20 @@ public class Boomerang : MonoBehaviour
 
     float _timeSinceThrown = 0f;
 
-    int _consecutiveHits = 0;
+    int _consecutiveHitsOnEnemies = 0;
+    int _consecutiveHitsOnSolidObjects = 0;
+
+    Vector3 _lastActivePosition;
+
+    float _lastBreakTime = -1000f;
 
     public bool IsThrown { get => _isThrown;}
     public bool IsBeingPulled { get => _isBeingPulled; }
     public bool CanBePutAway { get => _canBePutAway; }
     public bool CanBePulled { get => _canBePulled; }
 
+
+    // Reserved Methods
     void Awake()
     {
         _rb = GetComponent<Rigidbody2D>();
@@ -81,6 +92,69 @@ public class Boomerang : MonoBehaviour
             }
         }
     }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Player")
+            return;
+
+        Vector2 collisionNormal = collision.GetContact(0).normal;
+
+        if (collision.gameObject.tag == "Enemy")
+        {
+
+            DamageHitbox enemyHitbox = collision.gameObject.GetComponent<DamageHitbox>();
+
+            if (enemyHitbox != null)
+            {
+                HitEnemy(enemyHitbox, collisionNormal);
+            }
+        }
+        else
+        {
+            HitSolid(collisionNormal);
+        }
+
+        Bounce(collisionNormal);
+    }
+
+
+    void OnDrawGizmos()
+    {
+        if (_debug == false || _isThrown == false)
+            return;
+
+        //Green direction input
+        Gizmos.color = Color.green;
+        Gizmos.DrawLine(this.transform.position, this.transform.position + new Vector3(_desiredVelocity.normalized.x, _desiredVelocity.normalized.y, 0f) * _gizmosSize);
+
+        //Blue velocity
+        Gizmos.color = Color.blue;
+        Gizmos.DrawLine(this.transform.position, this.transform.position + new Vector3(_velocityAfterUpdate.normalized.x, _velocityAfterUpdate.normalized.y, 0f) * _gizmosSize);
+    }
+
+    //Public Methods
+
+    public void Throw(Vector2 direction, Vector2 startPosition)
+    {
+        if (_isThrown == false)
+        {
+            if (Time.time - _lastBreakTime < _cooldownAfterBroke)
+                return;
+
+            Activate(direction, startPosition);
+        }
+    }
+
+
+    public void Pull(bool pull)
+    {
+        _isBeingPulled = pull && _canBePulled;
+    }
+
+
+
+    //Private Methods
 
     void Move()
     {
@@ -118,23 +192,9 @@ public class Boomerang : MonoBehaviour
 
         // Stored for debug
         _desiredVelocity = desiredVelocity;
+
+        _lastActivePosition = this.transform.position;
     }
-
-
-    public void Throw(Vector2 direction, Vector2 startPosition) 
-    {
-        if (_isThrown == false)
-        {   
-            Activate(direction, startPosition);
-        }
-    }
-
-
-    public void Pull(bool pull)
-    {
-        _isBeingPulled = pull && _canBePulled;
-    }
-
 
     void Activate(Vector2 direction, Vector2 startPosition)
     {
@@ -169,7 +229,8 @@ public class Boomerang : MonoBehaviour
 
         // Setting up variables
         _timeSinceThrown = 0f;
-        _consecutiveHits = 0;
+        _consecutiveHitsOnEnemies = 0;
+        _consecutiveHitsOnSolidObjects = 0;
 
         // Flying initial state
         _modifiedFlyingDuration = _expectedFlyingDuration;
@@ -193,10 +254,7 @@ public class Boomerang : MonoBehaviour
         this.transform.parent = _hero.transform;
 
 
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            transform.GetChild(i).gameObject.SetActive(false);
-        }
+        _hideWhenInactiveObject.SetActive(false);
     }
 
 
@@ -209,68 +267,58 @@ public class Boomerang : MonoBehaviour
     void SetTrueCanBePulled()
     {
         _canBePulled = true;
-    }
+    }    
 
 
-    void OnCollisionEnter2D(Collision2D collision)
+    void HitEnemy(DamageHitbox enemyHitbox, Vector2 collisionNormal)
     {
-        if (collision.gameObject.tag == "Player")
-            return;
-
-        Vector2 collisionNormal = collision.GetContact(0).normal;
-
-        if (collision.gameObject.tag == "Enemy")
-        {
-
-            DamageHitbox enemyHitbox = collision.gameObject.GetComponent<DamageHitbox>();
-
-            if (enemyHitbox != null)
-            {
-                HitEnemy(enemyHitbox, -collisionNormal);
-            }
-        }
-
-        Bounce(collisionNormal);
-    }
-
-
-    void HitEnemy(DamageHitbox enemyHitbox, Vector2 direction)
-    {
-        _consecutiveHits++;
-        _consecutiveHits = Mathf.Clamp(_consecutiveHits, 0, 3);
+        _consecutiveHitsOnEnemies++;
+        _consecutiveHitsOnEnemies = Mathf.Clamp(_consecutiveHitsOnEnemies, 0, 3);
 
         if (_audioSource != null)
         {
-            _audioSource.pitch = 1f + _consecutiveHits * 0.3f;
+            _audioSource.pitch = 1f + _consecutiveHitsOnEnemies * 0.3f;
             _audioSource.Play();
         }
 
         float intensity;
-        if (_consecutiveHits == 1)
+        if (_consecutiveHitsOnEnemies == 1)
         {
             intensity = 1;
         }
-        else if (_consecutiveHits == 2)
+        else if (_consecutiveHitsOnEnemies == 2)
         {
             intensity = 2;
             _cinemachineImpulseSource?.GenerateImpulseWithForce(0.07f);
-            if (BoomeranImpactSmallPrefab != null)
-                Instantiate(BoomeranImpactSmallPrefab, this.transform.position, Quaternion.identity);
+            if (_boomerangImpactSmallPrefab != null)
+                Instantiate(_boomerangImpactSmallPrefab, this.transform.position, Quaternion.identity);
         }
         else
         {
             intensity = 3;
             _cinemachineImpulseSource?.GenerateImpulseWithForce(0.15f);
-            if (BoomeranImpactSmallPrefab != null)
-                Instantiate(BoomeranImpactSmallPrefab, this.transform.position, Quaternion.identity);
-            if (BoomeranImpactBigPrefab != null)
-                Instantiate(BoomeranImpactBigPrefab, this.transform.position, Quaternion.identity);
+            if (_boomerangImpactSmallPrefab != null)
+                Instantiate(_boomerangImpactSmallPrefab, this.transform.position, Quaternion.identity);
+            if (_boomerangImpactBigPrefab != null)
+                Instantiate(_boomerangImpactBigPrefab, this.transform.position, Quaternion.identity);
         }
 
-        enemyHitbox.Hit(new HitInfo(direction,intensity));
-        print(intensity);
+        enemyHitbox.Hit(new HitInfo(-collisionNormal,intensity));
     }
 
+    void HitSolid(Vector2 collisionNormal)
+    {
+        _consecutiveHitsOnSolidObjects++;
+
+        if (_consecutiveHitsOnSolidObjects < _consecutiveHitsOnSolidObjectsToBreak)
+        {
+            Bounce(collisionNormal);
+        }
+        else
+        {
+            BreakBoomerang();
+        }
+    }
 
     void Bounce(Vector3 normalDirection)
     {
@@ -285,18 +333,14 @@ public class Boomerang : MonoBehaviour
         Invoke("SetTrueCanBePulled", _secondsBeforeCanBePulled);
     }
 
-
-    void OnDrawGizmos()
+    void BreakBoomerang()
     {
-        if (_debug == false || _isThrown == false)
+        if (!_isThrown)
             return;
 
-        //Green direction input
-        Gizmos.color = Color.green;
-        Gizmos.DrawLine(this.transform.position, this.transform.position + new Vector3(_desiredVelocity.normalized.x, _desiredVelocity.normalized.y, 0f) * _gizmosSize);
+        Deactivate();
+        _boomerangTeleportParticles.Play(_lastActivePosition);
 
-        //Blue velocity
-        Gizmos.color = Color.blue;
-        Gizmos.DrawLine(this.transform.position, this.transform.position + new Vector3(_velocityAfterUpdate.normalized.x, _velocityAfterUpdate.normalized.y, 0f) * _gizmosSize);
-    }
+        _lastBreakTime = Time.time;
+    }       
 }
