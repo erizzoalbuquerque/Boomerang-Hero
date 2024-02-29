@@ -10,8 +10,8 @@ public class AttackHitbox : MonoBehaviour
     [SerializeField] LayerMask _whatIsHittable;
     [SerializeField] LayerMask _whatIsSolid;
 
-    [SerializeField] UnityEvent _collidedWithHittable;
-    [SerializeField] UnityEvent _collidedWithSolid;
+    [SerializeField] public UnityEvent CollidedWithHittable;
+    [SerializeField] public UnityEvent CollidedWithSolid;
 
     public bool IsActive { get => _isActive; set => _isActive = value; }
 
@@ -35,13 +35,13 @@ public class AttackHitbox : MonoBehaviour
             if (damageable != null)
             {
                 damageable.Hit(new HitInfo(c.transform.position - this.transform.position, _intensity));
-                _collidedWithHittable.Invoke();
+                CollidedWithHittable.Invoke();
             }
         }
 
         if (_whatIsSolid.Contains(c.gameObject.layer))
         {
-            _collidedWithSolid.Invoke();
+            CollidedWithSolid.Invoke();
         }        
     }
 }

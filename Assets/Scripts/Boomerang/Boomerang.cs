@@ -11,6 +11,9 @@ public class Boomerang : MonoBehaviour
     [SerializeField] GameObject _boomerangImpactSmallPrefab;
     [SerializeField] GameObject _boomerangImpactBigPrefab;
     [SerializeField] BoomerangTeleportParticles _boomerangTeleportParticles;
+    [SerializeField] AudioClip _hitEnemySound;
+    [SerializeField] AudioClip _hitSolidSound;
+    [SerializeField] AudioClip _boomerangBrokeSound;
 
     [Header("Regular Settings")]
     [SerializeField] float _regularMaxSpeed = 1f;
@@ -103,11 +106,15 @@ public class Boomerang : MonoBehaviour
         if (collision.gameObject.tag == "Enemy")
         {
 
-            DamageHitbox enemyHitbox = collision.gameObject.GetComponent<DamageHitbox>();
+            DamageHitbox enemyHitbox = collision.collider.gameObject.GetComponent<DamageHitbox>();
 
             if (enemyHitbox != null)
             {
                 HitEnemy(enemyHitbox, collisionNormal);
+            }
+            else
+            {
+                HitSolid(collisionNormal);
             }
         }
         else
@@ -278,7 +285,7 @@ public class Boomerang : MonoBehaviour
         if (_audioSource != null)
         {
             _audioSource.pitch = 1f + _consecutiveHitsOnEnemies * 0.3f;
-            _audioSource.Play();
+            _audioSource.PlayOneShot(_hitEnemySound);
         }
 
         float intensity;
@@ -313,6 +320,8 @@ public class Boomerang : MonoBehaviour
         if (_consecutiveHitsOnSolidObjects < _consecutiveHitsOnSolidObjectsToBreak)
         {
             Bounce(collisionNormal);
+            _audioSource.pitch = 1 + _consecutiveHitsOnSolidObjects * 0.1f;
+            _audioSource.PlayOneShot(_hitSolidSound);
         }
         else
         {
@@ -340,6 +349,9 @@ public class Boomerang : MonoBehaviour
 
         Deactivate();
         _boomerangTeleportParticles.Play(_lastActivePosition);
+
+        _audioSource.pitch = 1;
+        _audioSource.PlayOneShot(_boomerangBrokeSound);
 
         _lastBreakTime = Time.time;
     }       

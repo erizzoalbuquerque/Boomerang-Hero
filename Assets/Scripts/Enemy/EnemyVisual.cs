@@ -15,6 +15,6 @@ public class EnemyVisual : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        this.transform.rotation = Quaternion.FromToRotation(Vector2.up, _enemy.FacingDirection);
     }
 }

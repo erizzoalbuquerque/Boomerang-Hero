@@ -12,8 +12,10 @@ public class BaseCharacterController : MonoBehaviour
     [Header("Settings")]
     [SerializeField] protected float _invencibilityDuration = 0.5f;
     [SerializeField] protected float _staggerDuration = 0.3f;
+    [SerializeField] protected bool _faceDirectionAutomatically = true;
 
     protected Vector2 _lastNonZeroInputDirection;
+    private Vector2 _facingDirection;
     protected bool _isStaggered = false;
     protected bool _isInvencible = false;
 
@@ -24,7 +26,8 @@ public class BaseCharacterController : MonoBehaviour
 
     public bool IsInvencible { get => _isInvencible; }
     public bool IsStaggered { get => _isStaggered; }
-    public Vector2 LastNonZeroInputDirection { get => _lastNonZeroInputDirection; }
+    public Vector2 LastNonZeroMovingDirection { get => _lastNonZeroInputDirection; }
+    public Vector2 FacingDirection { get => _facingDirection; }
 
 
     // Reserverd Methods
@@ -61,10 +64,36 @@ public class BaseCharacterController : MonoBehaviour
     public void Move(Vector2 direction)
     {
         if (direction != Vector2.zero)
-            _lastNonZeroInputDirection = direction;
+            _lastNonZeroInputDirection = direction.normalized;
 
         if (_isStaggered == false)
+        {
             _movement.Move(direction);
+
+            if (_faceDirectionAutomatically == true)
+                Face(direction);
+        }
+    }
+
+    public void Face(Vector2 direction)
+    {
+        if (_isStaggered == true)
+            return;
+
+        if (direction == Vector2.zero) 
+            return;
+
+        float angle = Vector2.SignedAngle(Vector2.up, direction);
+
+        //print(angle);
+        if (angle > -45 && angle < 45f)
+            _facingDirection = Vector2.up;
+        else if (angle >= 45f && angle <= 135f)
+            _facingDirection = Vector2.left;
+        else if (angle > 135f || angle < -135f)
+            _facingDirection = Vector2.down;
+        else
+            _facingDirection = Vector2.right;
     }
 
 

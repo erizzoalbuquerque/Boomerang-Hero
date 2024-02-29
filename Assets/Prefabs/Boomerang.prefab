@@ -80,10 +80,13 @@ MonoBehaviour:
   _hero: {fileID: 0}
   _audioSource: {fileID: 2490894911576710309}
   _cinemachineImpulseSource: {fileID: 6312083699045959018}
-  _hideWhenInactiveObject: {fileID: 0}
+  _hideWhenInactiveObject: {fileID: 4060339100465366348}
   _boomerangImpactSmallPrefab: {fileID: 1023490205585931736, guid: 4024a5f92a6182c449f5ce407c44d466, type: 3}
   _boomerangImpactBigPrefab: {fileID: 1574058316706359505, guid: 19a45e47c355956429ece0cdbc3ea84a, type: 3}
   _boomerangTeleportParticles: {fileID: 3992582092537755962}
+  _hitEnemySound: {fileID: 8300000, guid: 0b1b2791d698c2a4081303f61d65aa2a, type: 3}
+  _hitSolidSound: {fileID: 8300000, guid: c23a2749081d1b443b1dbb178524077b, type: 3}
+  _boomerangBrokeSound: {fileID: 8300000, guid: 8f1e5cf801d1953489dc409c3c669f82, type: 3}
   _regularMaxSpeed: 5
   _regularTurningSpeed: 3
   _pullingMaxSpeed: 20
@@ -184,6 +187,8 @@ MonoBehaviour:
     m_RotationOrder: 4
   _secondsBeforeCanBePutAway: 0.3
   _secondsBeforeCanBePulled: 0.3
+  _consecutiveHitsOnSolidObjectsToBreak: 5
+  _cooldownAfterBroke: 0.5
   _debug: 1
   _gizmosSize: 1
 --- !u!82 &2490894911576710309
@@ -814,17 +819,65 @@ PrefabInstance:
       propertyPath: playOnAwake
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1913561107622729927, guid: 5d7a9f3db05ab1b498cedd7ad4b2da31, type: 3}
+      propertyPath: ShapeModule.m_Position.x
+      value: -7.43
+      objectReference: {fileID: 0}
+    - target: {fileID: 1913561107622729927, guid: 5d7a9f3db05ab1b498cedd7ad4b2da31, type: 3}
+      propertyPath: VelocityModule.radial.scalar
+      value: -25
+      objectReference: {fileID: 0}
+    - target: {fileID: 1913561107622729927, guid: 5d7a9f3db05ab1b498cedd7ad4b2da31, type: 3}
+      propertyPath: InitialModule.startLifetime.scalar
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1913561107622729927, guid: 5d7a9f3db05ab1b498cedd7ad4b2da31, type: 3}
+      propertyPath: VelocityModule.speedModifier.scalar
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1913561107622729927, guid: 5d7a9f3db05ab1b498cedd7ad4b2da31, type: 3}
+      propertyPath: VelocityModule.speedModifier.minMaxState
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1913561107622729927, guid: 5d7a9f3db05ab1b498cedd7ad4b2da31, type: 3}
+      propertyPath: VelocityModule.speedModifier.maxCurve.m_Curve.Array.data[0].value
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1913561107622729927, guid: 5d7a9f3db05ab1b498cedd7ad4b2da31, type: 3}
+      propertyPath: VelocityModule.speedModifier.maxCurve.m_Curve.Array.data[1].inSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1913561107622729927, guid: 5d7a9f3db05ab1b498cedd7ad4b2da31, type: 3}
+      propertyPath: VelocityModule.speedModifier.maxCurve.m_Curve.Array.data[0].inWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1913561107622729927, guid: 5d7a9f3db05ab1b498cedd7ad4b2da31, type: 3}
+      propertyPath: VelocityModule.speedModifier.maxCurve.m_Curve.Array.data[1].inWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1913561107622729927, guid: 5d7a9f3db05ab1b498cedd7ad4b2da31, type: 3}
+      propertyPath: VelocityModule.speedModifier.maxCurve.m_Curve.Array.data[1].outSlope
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1913561107622729927, guid: 5d7a9f3db05ab1b498cedd7ad4b2da31, type: 3}
+      propertyPath: VelocityModule.speedModifier.maxCurve.m_Curve.Array.data[0].outWeight
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1913561107622729927, guid: 5d7a9f3db05ab1b498cedd7ad4b2da31, type: 3}
+      propertyPath: VelocityModule.speedModifier.maxCurve.m_Curve.Array.data[1].outWeight
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2156571541713000105, guid: 5d7a9f3db05ab1b498cedd7ad4b2da31, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.5344715
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2156571541713000105, guid: 5d7a9f3db05ab1b498cedd7ad4b2da31, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.75914097
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2156571541713000105, guid: 5d7a9f3db05ab1b498cedd7ad4b2da31, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.038001508
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2156571541713000105, guid: 5d7a9f3db05ab1b498cedd7ad4b2da31, type: 3}
       propertyPath: m_LocalRotation.w
