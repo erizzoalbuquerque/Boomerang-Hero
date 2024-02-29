@@ -280,8 +280,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 7927644391856487183}
+  m_Children: []
   m_Father: {fileID: 3978846403871374245}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1698228198525773402
@@ -466,10 +465,10 @@ MonoBehaviour:
   _whatIsSolid:
     serializedVersion: 2
     m_Bits: 0
-  _collidedWithHittable:
+  CollidedWithHittable:
     m_PersistentCalls:
       m_Calls: []
-  _collidedWithSolid:
+  CollidedWithSolid:
     m_PersistentCalls:
       m_Calls: []
 --- !u!1 &3047148044025223598
@@ -548,84 +547,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _character: {fileID: 3520271308368808179}
---- !u!1 &4115951659142173066
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7927644391856487183}
-  - component: {fileID: 2668758188963988804}
-  - component: {fileID: 3415451948540016851}
-  m_Layer: 9
-  m_Name: JumpAttack
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7927644391856487183
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4115951659142173066}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 580303189303236964}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2668758188963988804
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4115951659142173066}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df6798760c61e4cf49f5805e67b95ad8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _isActive: 1
-  _intensity: 3
-  _whatIsHittable:
-    serializedVersion: 2
-    m_Bits: 64
-  _whatIsSolid:
-    serializedVersion: 2
-    m_Bits: 0
-  _collidedWithHittable:
-    m_PersistentCalls:
-      m_Calls: []
-  _collidedWithSolid:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &3415451948540016851
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4115951659142173066}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 06dd5f73e4969430387779f729463ef3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _character: {fileID: 3520271308368808179}
-  _rb: {fileID: 9126294256682185280}
-  _attackHitbox: {fileID: 2668758188963988804}
-  _jumpDuration: 1.5
-  _jumpWaitDuration: 0.5
-  _jumpDistance: 4
-  _coolDown: 2
 --- !u!1 &4862622822196050807
 GameObject:
   m_ObjectHideFlags: 0
@@ -679,10 +600,10 @@ MonoBehaviour:
   _whatIsSolid:
     serializedVersion: 2
     m_Bits: 0
-  _collidedWithHittable:
+  CollidedWithHittable:
     m_PersistentCalls:
       m_Calls: []
-  _collidedWithSolid:
+  CollidedWithSolid:
     m_PersistentCalls:
       m_Calls: []
 --- !u!61 &944879883112820445
@@ -1168,9 +1089,9 @@ GameObject:
   - component: {fileID: 9158770394220063664}
   - component: {fileID: 3520271308368808179}
   - component: {fileID: 4327181376176575699}
-  - component: {fileID: 7002668797408539629}
   - component: {fileID: 3495887014381141560}
   - component: {fileID: 2527729923892781805}
+  - component: {fileID: 6626798968090031704}
   m_Layer: 9
   m_Name: ShieldEnemy
   m_TagString: Enemy
@@ -1186,7 +1107,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7383020108205885286}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 7.79, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1237,7 +1158,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca961570d8a051948823e9055a3db801, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 5
+  _health: 6
   _explosionPrefab: {fileID: 5754198211193893871, guid: ae790b6a0985d7b478d34c0274abe632, type: 3}
 --- !u!114 &3520271308368808179
 MonoBehaviour:
@@ -1272,22 +1193,6 @@ MonoBehaviour:
   _maxSpeed: 2
   _knockbackDuration: 0.5
   _knockbackDistance: 1
---- !u!114 &7002668797408539629
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7383020108205885286}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aaa8453b8183a49868a825b8eb227149, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _enemy: {fileID: 3520271308368808179}
-  _jumptAttackSkill: {fileID: 3415451948540016851}
-  _jumpThreshold: 2
-  _jumpAttackCooldown: 3
 --- !u!114 &3495887014381141560
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1301,7 +1206,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyMovement: {fileID: 4327181376176575699}
-  _jumptAttackSkill: {fileID: 3415451948540016851}
+  _jumptAttackSkill: {fileID: 0}
   _shotSkill: {fileID: 0}
 --- !u!114 &2527729923892781805
 MonoBehaviour:
@@ -1321,3 +1226,18 @@ MonoBehaviour:
     m_Bits: 128
   _movement: {fileID: 4327181376176575699}
   _shieldCollider: {fileID: 7841052030093129659}
+--- !u!114 &6626798968090031704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7383020108205885286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e70b470014a4ea49bce20b0729453da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _character: {fileID: 3520271308368808179}
+  _followDistance: 10
+  _restAfterHitDuration: 2
