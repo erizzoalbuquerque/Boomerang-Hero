@@ -6,7 +6,7 @@ public class GameManager : Singleton<GameManager>
 {
     [SerializeField] HeroController _hero;
 
-    public HeroController Hero { get => _hero; }
+    public HeroController Hero { get => GetHero(); }
 
     // Start is called before the first frame update
     void Start()
@@ -18,5 +18,13 @@ public class GameManager : Singleton<GameManager>
     void Update()
     {
         
+    }
+
+    HeroController GetHero()
+    {
+        if (_hero == null)
+            _hero = FindAnyObjectByType<HeroController>();
+
+        return _hero;
     }
 }

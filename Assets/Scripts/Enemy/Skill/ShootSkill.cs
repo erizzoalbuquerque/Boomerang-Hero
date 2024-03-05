@@ -11,15 +11,15 @@ public class ShootSkill : Skill
 
     [SerializeField] float _coolDown = 3f;
 
-    float _coolDownStartTime = 0f;
+    [SerializeField] Collider2D _collider2D;
 
-    Collider2D _collider2D;
+    float _coolDownStartTime = 0f;
 
 
     // Start is called before the first frame update
     void Start()
     {
-        _collider2D = transform.root.gameObject.GetComponent<Collider2D>();
+        
     }
 
 
