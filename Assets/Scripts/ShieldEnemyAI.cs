@@ -49,11 +49,13 @@ public class ShieldEnemyAI : MonoBehaviour
         _character.Move(Vector2.zero);
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
         UnityEditor.Handles.color = Color.red;
         UnityEditor.Handles.DrawWireDisc(this.transform.position, Vector3.forward, _followDistance);
     }
+#endif
 
     private void OnEnable()
     {

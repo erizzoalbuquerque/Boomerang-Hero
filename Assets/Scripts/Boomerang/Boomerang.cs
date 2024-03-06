@@ -159,7 +159,10 @@ public class Boomerang : MonoBehaviour
         _isBeingPulled = pull && _canBePulled;
     }
 
-
+    public void Stop(bool stop)
+    {
+        //Hold boomerang in the air. Not implmented yet.
+    }
 
     //Private Methods
 

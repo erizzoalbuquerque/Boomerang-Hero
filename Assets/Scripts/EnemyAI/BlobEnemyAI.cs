@@ -63,9 +63,12 @@ public class BlobEnemyAI : MonoBehaviour
         _enemy.Move(direction);
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
         UnityEditor.Handles.color = Color.red;
         UnityEditor.Handles.DrawWireDisc(this.transform.position, Vector3.forward, _jumpThreshold);
     }
+#endif
+
 }
